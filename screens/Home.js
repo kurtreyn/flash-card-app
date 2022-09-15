@@ -7,22 +7,22 @@ import ControlPanel from '../components/ControlPanel';
 // const plusIcon = Image.resolveAssetSource(PLUS_ICON).uri;
 
 export default function Home({ navigation }) {
-  const [postData, setPostData] = useState({ question: '', answer: '' });
-  const [question, setQuestion] = useState('');
-  const [answer, setAnswer] = useState('');
+  const [nameOfSet, setNameOfSet] = useState(null);
+  const [question, setQuestion] = useState(null);
+  const [answer, setAnswer] = useState(null);
   return (
     <SafeAreaView style={styles.homeContainer}>
       <InputContainer
-        postData={postData}
-        setPostData={setPostData}
+        nameOfSet={nameOfSet}
+        setNameOfSet={setNameOfSet}
         question={question}
         setQuestion={setQuestion}
         answer={answer}
         setAnswer={setAnswer}
       />
       <ControlPanel
-        postData={postData}
-        setPostData={setPostData}
+        nameOfSet={nameOfSet}
+        setNameOfSet={setNameOfSet}
         question={question}
         setQuestion={setQuestion}
         answer={answer}

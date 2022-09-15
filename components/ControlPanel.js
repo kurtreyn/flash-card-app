@@ -19,8 +19,8 @@ export default function ControlPanel({
   setQuestion,
   answer,
   setAnswer,
-  postData,
-  setPostData,
+  nameOfSet,
+  setNameOfSet,
 }) {
   const dispatch = useDispatch();
   const { posts } = useSelector((state) => state.Reducer);
