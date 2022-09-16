@@ -15,18 +15,20 @@ export default function InputContainer({
   setQuestion,
   answer,
   setAnswer,
-  nameOfSet,
-  setNameOfSet,
+  hasNameOfGroup,
+  setHasNameOfGroup,
+  nameOfGroup,
+  setNameOfGroup,
 }) {
   console.log('question:', question);
   console.log('answer:', answer);
-  console.log('nameOfSet', nameOfSet);
+  console.log('hasNameOfGroup', hasNameOfGroup);
 
   return (
     <KeyboardAvoidingView style={styles.inputContainer}>
-      {!nameOfSet ? (
+      {!hasNameOfGroup ? (
         <View style={styles.formWrapper}>
-          <Text style={styles.labelStyle}>Name of Set</Text>
+          <Text style={styles.labelStyle}>Name of Group</Text>
           <TextInput
             style={styles.textInputStyle}
             placeholder="enter namen"
@@ -34,12 +36,12 @@ export default function InputContainer({
             autoCapitalize="none"
             keyboardType="text"
             autoFocus={true}
-            onChangeText={setNameOfSet}
-            value={nameOfSet}
+            onChangeText={setNameOfGroup}
+            value={nameOfGroup}
           />
         </View>
       ) : null}
-      {nameOfSet ? (
+      {hasNameOfGroup ? (
         <View style={styles.formWrapper}>
           <Text style={styles.labelStyle}>Question</Text>
           <TextInput
@@ -54,7 +56,7 @@ export default function InputContainer({
           />
         </View>
       ) : null}
-      {nameOfSet ? (
+      {hasNameOfGroup ? (
         <View style={styles.formWrapper}>
           <Text style={styles.labelStyle}>Answer</Text>
           <TextInput
@@ -79,7 +81,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'column',
     height: '50%',
-    backgroundColor: '#222',
   },
   formWrapper: {
     display: 'flex',
