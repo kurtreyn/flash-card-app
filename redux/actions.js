@@ -1,10 +1,10 @@
-export const SET_POSTS = 'SET_POSTS ';
+export const SET_GROUPS = 'SET_GROUPS ';
 export const SET_LOADING = 'SET_LOADING ';
 
-export const setPosts = (post) => (dispatch) => {
+export const setGroups = (group) => (dispatch) => {
   dispatch({
-    type: SET_POSTS,
-    payload: post,
+    type: SET_GROUPS,
+    payload: group,
   });
 };
 

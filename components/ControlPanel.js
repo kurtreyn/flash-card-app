@@ -11,7 +11,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
-import { setPosts } from '../redux/actions';
+import { setGroups } from '../redux/actions';
 import HorizontalButton from './HorizontalButton';
 
 export default function ControlPanel({
@@ -23,15 +23,15 @@ export default function ControlPanel({
   setNameOfSet,
 }) {
   const dispatch = useDispatch();
-  const { posts } = useSelector((state) => state.Reducer);
+  const { groups } = useSelector((state) => state.Reducer);
 
   const handleDispatch = () => {
-    dispatch(setPosts({ question: question, answer: answer }));
+    dispatch(setGroups({ question: question, answer: answer }));
     setAnswer('');
     setQuestion('');
   };
 
-  console.log('POSTS', posts);
+  console.log('GROUPS', groups);
 
   return (
     <KeyboardAvoidingView

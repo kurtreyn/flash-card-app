@@ -8,8 +8,9 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import HorizontalButton from '../components/HorizontalButton';
+import SignInButton from '../components/SignInButton';
 
-export default function Login() {
+export default function Login({ navigate }) {
   return (
     <SafeAreaView style={styles.loginContainer}>
       <View style={styles.loginHeader}>
@@ -17,10 +18,10 @@ export default function Login() {
       </View>
       <View style={styles.buttonWrapper}>
         <TouchableOpacity onPress={() => alert('Login')}>
-          <HorizontalButton label={'Login'} bgColor={'#00a8e8'} />
+          <SignInButton />
         </TouchableOpacity>
         <TouchableOpacity onPress={() => alert('Sign Up')}>
-          <HorizontalButton label={'Sign Up'} bgColor={'#d81159'} />
+          {/* <HorizontalButton label={'Sign Up'} bgColor={'#d81159'} /> */}
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -35,10 +36,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     // marginTop: '15%',
     // marginBottom: '10%',
-    borderStyle: 'solid',
-    borderWidth: '2px',
-    borderColor: 'blue',
-    borderRadius: '10px',
+    // borderStyle: 'solid',
+    // borderWidth: '2px',
+    // borderColor: 'blue',
+    // borderRadius: '10px',
   },
   loginHeader: {
     alignItems: 'center',

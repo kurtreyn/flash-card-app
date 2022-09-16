@@ -8,6 +8,7 @@ import 'react-native-gesture-handler';
 import Login from './Login';
 import Home from './Home';
 import Profile from './Profile';
+import AddQuizGroup from './AddQuizGroup';
 import Store from '../redux/store';
 
 const screenOptions = {
@@ -40,6 +41,20 @@ export const SignedInStack = ({ currentUser, setCurrentUser }) => {
               tabBarLabel: 'Home',
               tabBarIcon: ({ color }) => (
                 <MaterialCommunityIcons name="home" color={color} size={26} />
+              ),
+            }}
+          />
+          <Tab.Screen
+            name="Add Quiz Group"
+            component={AddQuizGroup}
+            options={{
+              tabBarLabel: 'Add Quiz Group',
+              tabBarIcon: ({ color }) => (
+                <MaterialCommunityIcons
+                  name="border-color"
+                  color={color}
+                  size={26}
+                />
               ),
             }}
           />

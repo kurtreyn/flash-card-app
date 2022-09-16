@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { SET_POSTS, SET_LOADING } from './actions';
+import { SET_GROUPS, SET_LOADING } from './actions';
 
 const initialState = {
   posts: [],
@@ -9,7 +9,7 @@ const initialState = {
 
 const Reducer = (state = initialState, action) => {
   switch (action.type) {
-    case SET_POSTS:
+    case SET_GROUPS:
       return { ...state, posts: action.payload };
     case SET_LOADING:
       return { ...state, loading: action.payload };
