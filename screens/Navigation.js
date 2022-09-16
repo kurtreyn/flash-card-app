@@ -29,6 +29,7 @@ export const SignedInStack = ({ currentUser, setCurrentUser }) => {
             }}
             options={{
               tabBarLabel: 'Login',
+              headerShown: false,
               tabBarIcon: ({ color }) => (
                 <MaterialCommunityIcons name="login" color={color} size={26} />
               ),
@@ -83,7 +84,6 @@ export const SignedOutStack = () => (
     <NavigationContainer>
       <Tab.Navigator initialRouteName="Login" screenOptions={screenOptions}>
         <Tab.Screen name="Login" component={Login} />
-        {/* <Tab.Screen name="SignupScreen" component={SignupScreen} /> */}
       </Tab.Navigator>
     </NavigationContainer>
   </Provider>
