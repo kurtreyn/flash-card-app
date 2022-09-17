@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Text,
   StyleSheet,
@@ -8,6 +8,8 @@ import {
   TouchableOpacity,
   ImageBackground,
 } from 'react-native';
+import * as Google from 'expo-auth-session/providers/google';
+import * as WebBrowser from 'expo-web-browser';
 import { LinearGradient } from 'expo-linear-gradient';
 import { firebase, db } from '../firebase';
 import { useSelector, useDispatch } from 'react-redux';
@@ -18,40 +20,70 @@ import SignInButton from '../components/SignInButton';
 
 const image = { uri: 'https://reactjs.org/logo-og.png' };
 
+WebBrowser.maybeCompleteAuthSession();
+
 export default function Login({ navigate }) {
   const dispatch = useDispatch();
   const { current_user, token } = useSelector((state) => state.Reducer);
-  let GoogleAuth = new firebase.auth.GoogleAuthProvider();
-  GoogleAuth.addScope('https://www.googleapis.com/auth/contacts.readonly');
+  const [userInfo, setUserInfo] = useState(null);
+
+  const [request, response, promptAsync] = Google.useAuthRequest({
+    clientId: process.env.EXPO_AUTH_CLIENT_ID,
+  });
+
+  useEffect(() => {
+    if (response?.type === 'success') {
+      console.log('response', response);
+      dispatch(setToken(response.authentication.accessToken));
+    }
+  }, [response]);
 
   const handleLogin = async () => {
-    try {
-      await firebase
-        .auth()
-        .signInWithPopup(GoogleAuth)
-        .then((result) => {
-          let credential = result.credential;
-          let token = credential.accessToken;
-          let user = result.user;
-          console.log(`user: ${user}`);
-          dispatch(setCurrentUser(user));
-          dispatch(setToken(token));
-        });
-      console.log('Firebase Login Successful');
-    } catch (error) {
-      Alert.alert(
-        'Uh oh!',
-        error.message + '\n\n ... You will need a Google account to log in?',
-        [
-          {
-            text: 'OK',
-            onPress: () => console.log('OK'),
-            style: 'cancel',
-          },
-        ]
-      );
-    }
+    let userInfoResponse = await fetch(
+      'https://api.imgur.com/oauth2/authorize',
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+    userInfoResponse.json().then((data) => {
+      console.log('data', data);
+      setUserInfo(data);
+    });
   };
+
+  // console.log('userInfo', userInfo);
+
+  // const handleLogin = async () => {
+  //   try {
+  //     await firebase
+  //       .auth()
+  //       .signInWithPopup(GoogleAuth)
+  //       .then((result) => {
+  //         let credential = result.credential;
+  //         let token = credential.accessToken;
+  //         let user = result.user;
+  //         console.log(`user: ${user}`);
+  //         dispatch(setCurrentUser(user));
+  //         dispatch(setToken(token));
+  //       })
+  //       .then((navigation) => {
+  //         navigation.navigate('Home');
+  //       });
+  //     console.log('Firebase Login Successful');
+  //   } catch (error) {
+  //     Alert.alert(
+  //       'Uh oh!',
+  //       error.message + '\n\n ... You will need a Google account to log in?',
+  //       [
+  //         {
+  //           text: 'OK',
+  //           onPress: () => console.log('OK'),
+  //           style: 'cancel',
+  //         },
+  //       ]
+  //     );
+  //   }
+  // };
 
   // console.log('currentUser', current_user);
   // console.log('token', token);
@@ -64,7 +96,15 @@ export default function Login({ navigate }) {
       >
         {/* <ImageBackground source={image} resizeMode="cover" style={styles.image}> */}
         <View style={styles.buttonWrapper}>
-          <TouchableOpacity onPress={handleLogin}>
+          <TouchableOpacity
+            onPress={
+              token
+                ? handleLogin
+                : () => {
+                    promptAsync({ showInRevents: true });
+                  }
+            }
+          >
             <SignInButton />
           </TouchableOpacity>
         </View>

@@ -16,7 +16,7 @@ const screenOptions = {
 };
 const Tab = createMaterialBottomTabNavigator();
 
-export const SignedInStack = ({ currentUser, setCurrentUser }) => {
+export const SignedInStack = ({ handleLogin }) => {
   return (
     <Provider store={Store}>
       <NavigationContainer style={styles.container}>
