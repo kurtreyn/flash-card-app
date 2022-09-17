@@ -10,36 +10,15 @@ import {
   Pressable,
   TouchableOpacity,
 } from 'react-native';
-import { useSelector, useDispatch } from 'react-redux';
-import { setGroups, setHasGroupName } from '../redux/actions';
 import HorizontalButton from './HorizontalButton';
 
 export default function ControlPanel({
-  question,
-  setQuestion,
-  answer,
-  setAnswer,
   hasNameOfGroup,
-  setHasNameOfGroup,
-  nameOfGroup,
-  setNameOfGroup,
+  handleGroupNameStatus,
+  handleReset,
+  handleAddQandA,
+  handleAddGroup,
 }) {
-  const dispatch = useDispatch();
-  const { groups, has_group_name } = useSelector((state) => state.Reducer);
-
-  const handleGroupNameStatus = () => {
-    dispatch(setHasGroupName(true));
-  };
-
-  const handleDispatch = () => {
-    dispatch(setGroups({ question: question, answer: answer }));
-    setAnswer('');
-    setQuestion('');
-  };
-
-  console.log('GROUPS', groups);
-  console.log('has_group_name', has_group_name);
-
   return (
     <KeyboardAvoidingView
       style={styles.controlPanelContainer}
@@ -48,17 +27,29 @@ export default function ControlPanel({
     >
       {/* <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}> */}
       {!hasNameOfGroup && (
-        <Pressable onPress={handleGroupNameStatus}>
+        <Pressable onPress={handleGroupNameStatus} style={styles.addTopMargin}>
           <HorizontalButton label={'Add Group Name'} bgColor={'#d81159'} />
         </Pressable>
       )}
 
       {hasNameOfGroup && (
-        <Pressable onPress={handleDispatch}>
+        <Pressable onPress={handleAddQandA} style={styles.addTopMargin}>
           <HorizontalButton
             label={'Add Question & Answer'}
             bgColor={'#d81159'}
           />
+        </Pressable>
+      )}
+
+      {hasNameOfGroup && (
+        <Pressable onPress={handleAddGroup}>
+          <HorizontalButton label={'Submit Group'} bgColor={'#2980B9'} />
+        </Pressable>
+      )}
+
+      {hasNameOfGroup && (
+        <Pressable onPress={handleReset}>
+          <HorizontalButton label={'Reset'} bgColor={'#d81159'} />
         </Pressable>
       )}
 
@@ -73,5 +64,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'column',
     height: '50%',
+  },
+  addTopMargin: {
+    marginTop: 100,
   },
 });

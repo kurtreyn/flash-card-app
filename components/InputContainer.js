@@ -11,66 +11,75 @@ import { useSelector, useDispatch } from 'react-redux';
 import { setPosts } from '../redux/actions';
 
 export default function InputContainer({
+  hasNameOfGroup,
   question,
   setQuestion,
   answer,
   setAnswer,
-  hasNameOfGroup,
-  setHasNameOfGroup,
   nameOfGroup,
   setNameOfGroup,
 }) {
-  console.log('question:', question);
-  console.log('answer:', answer);
-  console.log('hasNameOfGroup', hasNameOfGroup);
-
   return (
     <KeyboardAvoidingView style={styles.inputContainer}>
-      {!hasNameOfGroup ? (
-        <View style={styles.formWrapper}>
-          <Text style={styles.labelStyle}>Name of Group</Text>
-          <TextInput
-            style={styles.textInputStyle}
-            placeholder="enter namen"
-            placeholderTextColor="#444"
-            autoCapitalize="none"
-            keyboardType="text"
-            autoFocus={true}
-            onChangeText={setNameOfGroup}
-            value={nameOfGroup}
-          />
+      {!hasNameOfGroup && (
+        <View style={styles.instructionsWrapper}>
+          <Text style={styles.labelStyle}>Enter a Name for your Group</Text>
         </View>
-      ) : null}
-      {hasNameOfGroup ? (
-        <View style={styles.formWrapper}>
-          <Text style={styles.labelStyle}>Question</Text>
-          <TextInput
-            style={styles.textInputStyle}
-            placeholder="enter question"
-            placeholderTextColor="#444"
-            autoCapitalize="none"
-            keyboardType="text"
-            autoFocus={true}
-            onChangeText={setQuestion}
-            value={question}
-          />
+      )}
+
+      {hasNameOfGroup && (
+        <View style={styles.instructionsWrapper}>
+          <Text style={styles.labelStyle}>Add Questions & Answers</Text>
         </View>
-      ) : null}
-      {hasNameOfGroup ? (
-        <View style={styles.formWrapper}>
-          <Text style={styles.labelStyle}>Answer</Text>
-          <TextInput
-            style={styles.textInputStyle}
-            placeholder="enter answer"
-            placeholderTextColor="#444"
-            autoCapitalize="none"
-            keyboardType="text"
-            autoFocus={true}
-            onChangeText={setAnswer}
-            value={answer}
-          />
-        </View>
-      ) : null}
+      )}
+
+      <View style={styles.innerInputContainer}>
+        {!hasNameOfGroup && (
+          <View style={styles.formWrapper}>
+            <TextInput
+              style={styles.textInputStyle}
+              placeholder="enter group name"
+              placeholderTextColor="#444"
+              autoCapitalize="none"
+              keyboardType="text"
+              autoFocus={true}
+              onChangeText={setNameOfGroup}
+              value={nameOfGroup}
+            />
+          </View>
+        )}
+
+        {hasNameOfGroup && (
+          <View style={styles.formWrapper}>
+            <Text style={styles.labelStyle}>Question</Text>
+            <TextInput
+              style={styles.textInputStyle}
+              placeholder="enter question"
+              placeholderTextColor="#444"
+              autoCapitalize="none"
+              keyboardType="text"
+              autoFocus={true}
+              onChangeText={setQuestion}
+              value={question}
+            />
+          </View>
+        )}
+        {hasNameOfGroup && (
+          <View style={styles.formWrapper}>
+            <Text style={styles.labelStyle}>Answer</Text>
+            <TextInput
+              style={styles.textInputStyle}
+              placeholder="enter answer"
+              placeholderTextColor="#444"
+              autoCapitalize="none"
+              keyboardType="text"
+              autoFocus={true}
+              onChangeText={setAnswer}
+              value={answer}
+            />
+          </View>
+        )}
+      </View>
     </KeyboardAvoidingView>
   );
 }
@@ -79,11 +88,25 @@ const styles = StyleSheet.create({
   inputContainer: {
     display: 'flex',
     alignItems: 'center',
+    // justifyContent: 'center',
     flexDirection: 'column',
     height: '50%',
+    borderStyle: 'solid',
+    // borderWidth: '2px',
+    // borderColor: 'red',
+  },
+  innerInputContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'column',
+    borderStyle: 'solid',
+    // borderWidth: '2px',
+    // borderColor: 'red',
   },
   formWrapper: {
     display: 'flex',
+    marginTop: 100,
     marginBottom: 15,
   },
   textInputStyle: {
@@ -98,5 +121,14 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 25,
     fontWeight: '400',
+  },
+  instructionsWrapper: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'column',
+    borderStyle: 'solid',
+    // borderWidth: '2px',
+    // borderColor: 'red',
   },
 });

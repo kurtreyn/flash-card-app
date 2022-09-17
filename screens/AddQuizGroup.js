@@ -1,15 +1,75 @@
 import React, { useState } from 'react';
 import { Text, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useSelector, useDispatch } from 'react-redux';
+import { setGroups, setHasGroupName, setGroupName } from '../redux/actions';
 import { LinearGradient } from 'expo-linear-gradient';
 import InputContainer from '../components/InputContainer';
 import ControlPanel from '../components/ControlPanel';
 
 export default function AddQuizGroup({ navigate }) {
-  const [hasNameOfGroup, setHasNameOfGroup] = useState(null);
-  const [nameOfGroup, setNameOfGroup] = useState(null);
-  const [question, setQuestion] = useState(null);
-  const [answer, setAnswer] = useState(null);
+  const dispatch = useDispatch();
+  const { groups, has_group_name, group_name } = useSelector(
+    (state) => state.Reducer
+  );
+  const [nameOfGroup, setNameOfGroup] = useState('');
+  const [question, setQuestion] = useState('');
+  const [answer, setAnswer] = useState('');
+  const [number, setNumber] = useState(0);
+  const [groupSet, setGroupSet] = useState(null);
+  let questionAnswerArr = [];
+
+  const handleGroupNameStatus = () => {
+    dispatch(setHasGroupName(true));
+    dispatch(setGroupName(nameOfGroup));
+  };
+
+  const handleReset = () => {
+    dispatch(setHasGroupName(false));
+    dispatch(setGroupName(''));
+    setGroupName('');
+    setNumber(0);
+  };
+
+  const handleAddQandA = () => {
+    if (groupSet === null) {
+      setGroupSet([
+        {
+          [question]: answer,
+        },
+      ]);
+    } else {
+      setGroupSet((prevState) => {
+        return [...prevState, { [question]: answer }];
+      });
+    }
+    setQuestion('');
+    setAnswer('');
+    setNumber(number + 1);
+  };
+
+  const handleAddGroup = () => {
+    const newGroup = Object.assign({}, ...groupSet);
+    let groupArr = [];
+    groupArr.push(newGroup);
+    dispatch(setGroups(groupArr));
+  };
+
+  const newGroup = Object.assign({}, ...groupSet);
+  let groupArr = [];
+  groupArr.push(newGroup);
+
+  // console.log('group_name:', group_name);
+  console.log('groups:', groups);
+  // console.log(`~~~~~~~~~~~~~~~~`);
+  // console.log('nameOfGroup', nameOfGroup);
+  // console.log('number', number);
+  // console.log('question', question);
+  // console.log('answer', answer);
+  // console.log('groupSet', groupSet);
+  // console.log('questionAnswerArr', questionAnswerArr);
+  // console.log('questionAnswerArr length', questionAnswerArr.length);
+
   return (
     <View style={styles.addQuizGroupContainer}>
       <LinearGradient
@@ -18,8 +78,7 @@ export default function AddQuizGroup({ navigate }) {
       >
         <View style={styles.innerContainer}>
           <InputContainer
-            hasNameOfGroup={hasNameOfGroup}
-            setHasNameOfGroup={setHasNameOfGroup}
+            hasNameOfGroup={has_group_name}
             nameOfGroup={nameOfGroup}
             setNameOfGroup={setNameOfGroup}
             question={question}
@@ -28,14 +87,11 @@ export default function AddQuizGroup({ navigate }) {
             setAnswer={setAnswer}
           />
           <ControlPanel
-            hasNameOfGroup={hasNameOfGroup}
-            setHasNameOfGroup={setHasNameOfGroup}
-            nameOfGroup={nameOfGroup}
-            setNameOfGroup={setNameOfGroup}
-            question={question}
-            setQuestion={setQuestion}
-            answer={answer}
-            setAnswer={setAnswer}
+            hasNameOfGroup={has_group_name}
+            handleGroupNameStatus={handleGroupNameStatus}
+            handleReset={handleReset}
+            handleAddQandA={handleAddQandA}
+            handleAddGroup={handleAddGroup}
           />
         </View>
       </LinearGradient>

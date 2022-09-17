@@ -53,8 +53,8 @@ export default function Login({ navigate }) {
     }
   };
 
-  console.log('currentUser', current_user);
-  console.log('token', token);
+  // console.log('currentUser', current_user);
+  // console.log('token', token);
 
   return (
     <View style={styles.loginContainer}>

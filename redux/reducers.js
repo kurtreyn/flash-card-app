@@ -9,7 +9,8 @@ import {
 } from './actions';
 
 const initialState = {
-  groups: [],
+  groups: null,
+  group_name: '',
   current_user: '',
   token: '',
   loading: false,
@@ -20,8 +21,8 @@ const Reducer = (state = initialState, action) => {
   switch (action.type) {
     case SET_GROUPS:
       return { ...state, groups: action.payload };
-    // case SET_GROUP_NAME:
-    //   return { ...state, posts: action.payload };
+    case SET_GROUP_NAME:
+      return { ...state, group_name: action.payload };
     case SET_HAS_GROUP_NAME:
       return { ...state, has_group_name: action.payload };
     case SET_CURRENT_USER:
