@@ -8,7 +8,11 @@ import GroupContainer from '../components/GroupContainer';
 // const plusIcon = Image.resolveAssetSource(PLUS_ICON).uri;
 
 export default function Home({ navigation }) {
-  const { groups, group_name } = useSelector((state) => state.Reducer);
+  const { groups, group_name, current_user } = useSelector(
+    (state) => state.Reducer
+  );
+
+  console.log('current_user', current_user);
 
   console.log('GROUPS', groups);
   return (

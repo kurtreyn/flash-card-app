@@ -1,14 +1,17 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Provider } from 'react-redux';
 import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import 'react-native-gesture-handler';
+import { useSelector, useDispatch } from 'react-redux';
+import { setCurrentUserDispatch } from '../redux/actions';
 import Login from './Login';
 import Home from './Home';
 import Profile from './Profile';
 import AddQuizGroup from './AddQuizGroup';
+import Signup from './Signup';
 import Store from '../redux/store';
 
 const screenOptions = {
@@ -16,7 +19,20 @@ const screenOptions = {
 };
 const Tab = createMaterialBottomTabNavigator();
 
-export const SignedInStack = ({ handleLogin }) => {
+export const SignedInStack = ({ navigation, currentUser }) => {
+  const { current_user } = useSelector((state) => state.Reducer);
+  const dispatch = useDispatch();
+
+  // console.log('currentUser', currentUser);
+
+  useEffect(() => {
+    if (currentUser) {
+      dispatch(setCurrentUserDispatch(currentUser));
+    }
+  }, []);
+
+  console.log('current_user', current_user);
+
   return (
     <Provider store={Store}>
       <NavigationContainer style={styles.container}>
@@ -32,6 +48,24 @@ export const SignedInStack = ({ handleLogin }) => {
               headerShown: false,
               tabBarIcon: ({ color }) => (
                 <MaterialCommunityIcons name="login" color={color} size={26} />
+              ),
+            }}
+          />
+          <Tab.Screen
+            name="Signup"
+            component={Signup}
+            labelStyle={{
+              color: '#444',
+            }}
+            options={{
+              tabBarLabel: 'Signup',
+              headerShown: false,
+              tabBarIcon: ({ color }) => (
+                <MaterialCommunityIcons
+                  name="clipboard-edit-outline"
+                  color={color}
+                  size={26}
+                />
               ),
             }}
           />

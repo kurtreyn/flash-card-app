@@ -11,7 +11,7 @@ import {
 const initialState = {
   groups: null,
   group_name: '',
-  current_user: '',
+  current_user: null,
   token: '',
   loading: false,
   has_group_name: false,

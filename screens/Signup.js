@@ -26,39 +26,34 @@ import appLogo from '../assets/quizzie-logo.png';
 
 const quizzieLogo = Image.resolveAssetSource(appLogo).uri;
 
-export default function Login({ navigation }) {
+export default function Signup({ navigation }) {
   const dispatch = useDispatch();
   const { current_user, token } = useSelector((state) => state.Reducer);
   const [userInfo, setUserInfo] = useState(null);
 
-  const loginFormSchema = Yup.object().shape({
+  const signupFormSchema = Yup.object().shape({
     email: Yup.string().email().required('An email is required'),
+    username: Yup.string().required().min(2, 'A username is required'),
     password: Yup.string()
       .required()
       .min(6, 'Your password has to have at least 8 characters'),
   });
 
-  const onLogin = async (email, password) => {
+  const onSignup = async (email, username, password) => {
     try {
-      await firebase.auth().signInWithEmailAndPassword(email, password);
-      console.log('Firebase Login Successful', email, password);
-      () => navigation.push('Home');
+      const authUser = await firebase
+        .auth()
+        .createUserWithEmailAndPassword(email, password);
+      console.log('Firebas user created successfully');
+      db.collection('users').doc(authUser.user.email).set({
+        owner_uid: authUser.user.uid,
+        username: username,
+        email: authUser.user.email,
+        profile_picture: null,
+        photoURL: null,
+      });
     } catch (error) {
-      Alert.alert(
-        'Uh oh!',
-        error.message + '\n\n ... What would you like to do next?',
-        [
-          {
-            text: 'OK',
-            onPress: () => console.log('OK'),
-            style: 'cancel',
-          },
-          {
-            text: 'Sign Up',
-            onPress: () => navigation.push('SignupScreen'),
-          },
-        ]
-      );
+      Alert.alert('Uh oh...', error.message);
     }
   };
 
@@ -77,11 +72,11 @@ export default function Login({ navigation }) {
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
           <View style={styles.wrapper}>
             <Formik
-              initialValues={{ email: '', password: '' }}
+              initialValues={{ email: '', username: '', password: '' }}
               onSubmit={(values) => {
-                onLogin(values.email, values.password);
+                onSignup(values.email, values.username, values.password);
               }}
-              validationSchema={loginFormSchema}
+              validationSchema={signupFormSchema}
               validateOnMount={true}
             >
               {({
@@ -99,13 +94,13 @@ export default function Login({ navigation }) {
                         borderColor:
                           values.email.length < 1 ||
                           Validator.validate(values.email)
-                            ? '#fff'
+                            ? '#ccc'
                             : 'red',
                       },
                     ]}
                   >
                     <TextInput
-                      placeholder="username or email"
+                      placeholder="Email"
                       placeholderTextColor="#444"
                       autoCapitalize="none"
                       keyboardType="email-address"
@@ -121,9 +116,32 @@ export default function Login({ navigation }) {
                       styles.inputField,
                       {
                         borderColor:
+                          values.email.length < 1 ||
+                          Validator.validate(values.email)
+                            ? '#ccc'
+                            : 'red',
+                      },
+                    ]}
+                  >
+                    <TextInput
+                      placeholder="Username"
+                      placeholderTextColor="#444"
+                      autoCapitalize="none"
+                      textContentType="username"
+                      autoFocus={true}
+                      onChangeText={handleChange('username')}
+                      onBlur={handleBlur('username')}
+                      value={values.username}
+                    />
+                  </View>
+                  <View
+                    style={[
+                      styles.inputField,
+                      {
+                        borderColor:
                           1 > values.password.length ||
                           values.password.length > 6
-                            ? '#fff'
+                            ? '#CCC'
                             : 'red',
                       },
                     ]}
@@ -148,14 +166,12 @@ export default function Login({ navigation }) {
                     style={styles.button(isValid)}
                     onPress={handleSubmit}
                   >
-                    <Text style={styles.buttonText}>Log In</Text>
+                    <Text style={styles.buttonText}>Sign Up</Text>
                   </Pressable>
                   <View style={styles.signupContainer}>
-                    <Text>Don't have an account?</Text>
-                    <TouchableOpacity
-                      onPress={() => navigation.push('SignupScreen')}
-                    >
-                      <Text style={{ color: '#3c1053' }}> Sign Up</Text>
+                    <Text>Already have an account?</Text>
+                    <TouchableOpacity onPress={() => navigation.goBack()}>
+                      <Text style={{ color: '#3c1053' }}> Log In</Text>
                     </TouchableOpacity>
                   </View>
                 </>

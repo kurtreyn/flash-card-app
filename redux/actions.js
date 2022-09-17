@@ -5,7 +5,7 @@ export const SET_TOKEN = 'SET_TOKEN';
 export const SET_GROUP_NAME = 'SET_GROUP_NAME';
 export const SET_HAS_GROUP_NAME = 'SET_HAS_GROUP_NAME';
 
-export const setCurrentUser = (user) => (dispatch) => {
+export const setCurrentUserDispatch = (user) => (dispatch) => {
   dispatch({
     type: SET_CURRENT_USER,
     payload: user,
