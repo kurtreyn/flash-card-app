@@ -3,6 +3,7 @@ import {
   Text,
   StyleSheet,
   View,
+  ScrollView,
   Pressable,
   TouchableOpacity,
 } from 'react-native';
@@ -16,11 +17,14 @@ import MiniButton from '../components/MiniButton';
 
 export default function Home({ navigation }) {
   const [quizActive, setQuizActive] = useState(true);
+  const [subjectName, setSubjectName] = useState('');
   const { groups, current_user } = useSelector((state) => state.Reducer);
   let groupLength;
 
   if (groups) {
     groupLength = groups.length;
+    const { subject_name } = groups;
+    console.log(subject_name);
   }
   const dispatch = useDispatch();
 
@@ -59,25 +63,37 @@ export default function Home({ navigation }) {
             </Text>
           )}
         </View>
+
         {!quizActive && (
-          <View style={styles.innerContainer}>
-            {groups &&
-              groups.map((group, index) => {
-                return (
-                  <GroupContainer
-                    label={group.subject_name}
-                    key={index}
-                    id={group.id}
-                    handleQuizStatus={handleQuizStatus}
-                  />
-                );
-              })}
-          </View>
+          <ScrollView>
+            <View style={styles.innerContainer}>
+              {groups &&
+                groups.map((group, index) => {
+                  return (
+                    <GroupContainer
+                      label={group.subject_name}
+                      key={index}
+                      id={group.id}
+                      handleQuizStatus={handleQuizStatus}
+                    />
+                  );
+                })}
+            </View>
+          </ScrollView>
         )}
 
         {quizActive && (
           <View style={styles.innerContainer}>
-            <Quiz />
+            {groups &&
+              groups.map((group, index) => {
+                return (
+                  <Quiz
+                    group={group}
+                    key={index}
+                    subjectName={group.subject_name}
+                  />
+                );
+              })}
           </View>
         )}
         {/* <Pressable onPress={handleQuizStatus}>

@@ -3,15 +3,37 @@ import React, { useState } from 'react';
 import MiniButton from './MiniButton';
 import HorizontalButton from './HorizontalButton';
 
-export default function Quiz({ groups }) {
-  const [subjectName, setSubjectName] = useState('');
-  const [questions, setQuestions] = useState(null);
-  const [answers, setAnswers] = useState(null);
+export default function Quiz({ group, subjectName }) {
+  //   const [questions, setQuestions] = useState(null);
+  //   const [answers, setAnswers] = useState(null);
+
+  const questions = [];
+  const answers = [];
+
+  const { post_q_a } = group;
+  //   console.log(post_q_a);
+
+  post_q_a.map((obj) => {
+    // console.log(obj);
+    let keys = Object.keys(obj);
+    // console.log(keys);
+
+    keys.forEach((key) => {
+      let values = obj[key];
+      questions.push(key);
+      answers.push(values);
+    });
+  });
+
+  //   console.log('GROUP:', group);
+  //   console.log('subjectName', subjectName);
+  //   console.log('questions', questions);
+  console.log('answers', answers);
 
   return (
     <View style={styles.quizContainer}>
       <View styles={styles.header}>
-        <Text style={styles.headerText}>Biology</Text>
+        <Text style={styles.headerText}>{subjectName}</Text>
       </View>
 
       <View style={styles.questionSection}>
