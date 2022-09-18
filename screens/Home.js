@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Text, StyleSheet, View } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
+import { firebase, db } from '../firebase';
 import GroupContainer from '../components/GroupContainer';
 
 // const plusIcon = Image.resolveAssetSource(PLUS_ICON).uri;

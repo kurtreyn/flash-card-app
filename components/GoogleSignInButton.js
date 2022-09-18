@@ -4,7 +4,7 @@ import GOOGLEBTN from '../assets/btn_google.png';
 
 const googleBtn = Image.resolveAssetSource(GOOGLEBTN).uri;
 
-export default function SignInButton() {
+export default function GoogleSignInButton() {
   return (
     <View>
       <Image

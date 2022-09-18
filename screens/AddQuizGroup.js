@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Text, StyleSheet, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { useSelector, useDispatch } from 'react-redux';
 import { setGroups, setHasGroupName, setGroupName } from '../redux/actions';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -17,7 +16,7 @@ export default function AddQuizGroup({ navigate }) {
   const [answer, setAnswer] = useState('');
   const [number, setNumber] = useState(0);
   const [groupSet, setGroupSet] = useState(null);
-  let questionAnswerArr = [];
+  // let questionAnswerArr = [];
 
   const handleGroupNameStatus = () => {
     dispatch(setHasGroupName(true));
@@ -61,14 +60,6 @@ export default function AddQuizGroup({ navigate }) {
 
   // console.log('group_name:', group_name);
   console.log('groups:', groups);
-  // console.log(`~~~~~~~~~~~~~~~~`);
-  // console.log('nameOfGroup', nameOfGroup);
-  // console.log('number', number);
-  // console.log('question', question);
-  // console.log('answer', answer);
-  // console.log('groupSet', groupSet);
-  // console.log('questionAnswerArr', questionAnswerArr);
-  // console.log('questionAnswerArr length', questionAnswerArr.length);
 
   return (
     <View style={styles.addQuizGroupContainer}>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   Text,
   StyleSheet,
@@ -6,7 +6,6 @@ import {
   Alert,
   Pressable,
   TouchableOpacity,
-  ImageBackground,
   TextInput,
   Image,
   KeyboardAvoidingView,
@@ -16,20 +15,22 @@ import {
 
 import { LinearGradient } from 'expo-linear-gradient';
 import { firebase, db } from '../firebase';
-import { useSelector, useDispatch } from 'react-redux';
-import { setCurrentUser, setToken } from '../redux/actions';
+// import { useSelector, useDispatch } from 'react-redux';
+// import { setCurrentUser, setToken } from '../redux/actions';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import Validator from 'email-validator';
 
 import appLogo from '../assets/quizzie-logo.png';
+import BLANK_PROFILE_PIC from '../assets/profile-avatar.png';
 
 const quizzieLogo = Image.resolveAssetSource(appLogo).uri;
+const profileAvatar = Image.resolveAssetSource(BLANK_PROFILE_PIC).uri;
 
 export default function Signup({ navigation }) {
-  const dispatch = useDispatch();
-  const { current_user, token } = useSelector((state) => state.Reducer);
-  const [userInfo, setUserInfo] = useState(null);
+  // const dispatch = useDispatch();
+  // const { current_user, token } = useSelector((state) => state.Reducer);
+  // const [userInfo, setUserInfo] = useState(null);
 
   const signupFormSchema = Yup.object().shape({
     email: Yup.string().email().required('An email is required'),
@@ -45,13 +46,16 @@ export default function Signup({ navigation }) {
         .auth()
         .createUserWithEmailAndPassword(email, password);
       console.log('Firebas user created successfully');
-      db.collection('users').doc(authUser.user.email).set({
-        owner_uid: authUser.user.uid,
-        username: username,
-        email: authUser.user.email,
-        profile_picture: null,
-        photoURL: null,
-      });
+      db.collection('users')
+        .doc(authUser.user.email)
+        .set({
+          owner_uid: authUser.user.uid,
+          username: username,
+          email: authUser.user.email,
+          profile_picture: profileAvatar,
+          photoURL: profileAvatar,
+        })
+        .then(() => navigation.navigate({ name: 'Home' }));
     } catch (error) {
       Alert.alert('Uh oh...', error.message);
     }

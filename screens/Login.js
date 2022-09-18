@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import {
   Text,
   StyleSheet,
@@ -16,20 +16,19 @@ import {
 
 import { LinearGradient } from 'expo-linear-gradient';
 import { firebase, db } from '../firebase';
-import { useSelector, useDispatch } from 'react-redux';
-import { setCurrentUser, setToken } from '../redux/actions';
+// import { useSelector, useDispatch } from 'react-redux';
+// import { setCurrentUser, setToken } from '../redux/actions';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import Validator from 'email-validator';
 
 import appLogo from '../assets/quizzie-logo.png';
-
 const quizzieLogo = Image.resolveAssetSource(appLogo).uri;
 
 export default function Login({ navigation }) {
-  const dispatch = useDispatch();
-  const { current_user, token } = useSelector((state) => state.Reducer);
-  const [userInfo, setUserInfo] = useState(null);
+  // const dispatch = useDispatch();
+  // const { current_user, token } = useSelector((state) => state.Reducer);
+  // const [userInfo, setUserInfo] = useState(null);
 
   const loginFormSchema = Yup.object().shape({
     email: Yup.string().email().required('An email is required'),
@@ -40,9 +39,15 @@ export default function Login({ navigation }) {
 
   const onLogin = async (email, password) => {
     try {
-      await firebase.auth().signInWithEmailAndPassword(email, password);
-      console.log('Firebase Login Successful', email, password);
-      () => navigation.push('Home');
+      await firebase
+        .auth()
+        .signInWithEmailAndPassword(email, password)
+        .then((response) => {
+          console.log('Firebase Login Successful', email, password);
+          if (response) {
+            navigation.navigate({ name: 'Home' });
+          }
+        });
     } catch (error) {
       Alert.alert(
         'Uh oh!',
@@ -55,7 +60,7 @@ export default function Login({ navigation }) {
           },
           {
             text: 'Sign Up',
-            onPress: () => navigation.push('SignupScreen'),
+            onPress: () => navigation.navigate({ name: 'Signup' }),
           },
         ]
       );
@@ -153,7 +158,7 @@ export default function Login({ navigation }) {
                   <View style={styles.signupContainer}>
                     <Text>Don't have an account?</Text>
                     <TouchableOpacity
-                      onPress={() => navigation.push('SignupScreen')}
+                      onPress={() => navigation.navigate({ name: 'Signup' })}
                     >
                       <Text style={{ color: '#3c1053' }}> Sign Up</Text>
                     </TouchableOpacity>
