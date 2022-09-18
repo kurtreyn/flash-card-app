@@ -44,7 +44,7 @@ export default function Home({ navigation }) {
   }, [groupLength]);
 
   // console.log('current_user', current_user);
-  console.log('GROUPS', groups);
+  // console.log('GROUPS', groups);
 
   return (
     <View style={styles.homeContainer}>
@@ -67,6 +67,7 @@ export default function Home({ navigation }) {
                   <GroupContainer
                     label={group.subject_name}
                     key={index}
+                    id={group.id}
                     handleQuizStatus={handleQuizStatus}
                   />
                 );

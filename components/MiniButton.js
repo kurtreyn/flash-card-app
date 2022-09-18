@@ -2,7 +2,7 @@ import React from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Text, StyleSheet, View, TouchableOpacity } from 'react-native';
 
-export default function MiniButton({ label, bgColor }) {
+export default function MiniButton({ option }) {
   return (
     <View style={styles.miniButtonContainer}>
       <TouchableOpacity styles={styles.miniButtonContainer}>
@@ -10,7 +10,9 @@ export default function MiniButton({ label, bgColor }) {
           colors={['#8A2387', '#E94057', '#F27121']}
           style={styles.gradient}
         >
-          <Text style={styles.miniButtonLabel}>{label}</Text>
+          <Text style={styles.miniButtonLabel} value={option}>
+            {option}
+          </Text>
         </LinearGradient>
       </TouchableOpacity>
     </View>
@@ -26,6 +28,8 @@ const styles = StyleSheet.create({
     width: 200,
     height: 40,
     marginBottom: 10,
+    marginLeft: 5,
+    marginRight: 5,
   },
   miniButtonLabel: {
     fontSize: '20px',
@@ -33,7 +37,9 @@ const styles = StyleSheet.create({
     color: '#fff',
   },
   gradient: {
-    flex: 1,
+    // flex: 1,
+    display: 'flex',
+    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 5,

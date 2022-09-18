@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, usEffect } from 'react';
 import {
   Text,
   StyleSheet,
@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
-export default function GroupContainer({ label, handleQuizStatus }) {
+export default function GroupContainer({ label, handleQuizStatus, id }) {
   return (
     <Pressable onPress={handleQuizStatus}>
       <TouchableHighlight underlayColor="#f7797d">
