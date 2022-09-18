@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Text, StyleSheet, View } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
+import { setGroups } from '../redux/actions';
 import { LinearGradient } from 'expo-linear-gradient';
 import { firebase, db } from '../firebase';
 import GroupContainer from '../components/GroupContainer';
@@ -8,34 +9,27 @@ import GroupContainer from '../components/GroupContainer';
 // const plusIcon = Image.resolveAssetSource(PLUS_ICON).uri;
 
 export default function Home({ navigation }) {
-  const [currentLoggedInUser, setCurrentLoggedInUser] = useState(null);
   const { groups, group_name, current_user } = useSelector(
     (state) => state.Reducer
   );
-
-  const getUserName = () => {
-    const user = firebase.auth().currentUser;
-    const unsubscribe = db
-      .collection('users')
-      .where('owner_uid', '==', user.uid)
-      .limit(1)
-      .onSnapshot((snapshot) =>
-        snapshot.docs.map((doc) => {
-          setCurrentLoggedInUser({
-            username: doc.data().username,
-            profilePicture: doc.data().profile_picture,
-          });
-        })
-      );
-    return unsubscribe;
-  };
-
-  // console.log('current_user', current_user);
-  // console.log('GROUPS', groups);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    getUserName();
+    const unsubscribe = db
+      .collectionGroup('posts')
+      .orderBy('timestamp', 'desc')
+      .onSnapshot((snapshot) => {
+        dispatch(
+          setGroups(
+            snapshot.docs.map((post) => ({ id: post.id, ...post.data() }))
+          )
+        );
+      });
+    return unsubscribe;
   }, []);
+
+  // console.log('current_user', current_user);
+  console.log('GROUPS', groups);
 
   return (
     <View style={styles.homeContainer}>

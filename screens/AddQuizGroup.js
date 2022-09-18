@@ -18,7 +18,7 @@ export default function AddQuizGroup({ navigation }) {
   const [answer, setAnswer] = useState('');
   const [number, setNumber] = useState(0);
   const [groupSet, setGroupSet] = useState([]);
-  let questionAnswerArr = [];
+  // let questionAnswerArr = [];
 
   const handleGroupNameStatus = () => {
     dispatch(setHasGroupName(true));
@@ -71,27 +71,8 @@ export default function AddQuizGroup({ navigation }) {
     const newGroup = Object.assign({}, ...groupSet);
     let groupArr = [];
     groupArr.push(newGroup);
-    dispatch(setGroups(groupArr));
-    // Alert.alert(
-    //   'Please confirm you want save',
-    //   [
-    //     {
-    //       text: 'Cancel',
-    //       onPress: () => console.log('Cancelled'),
-    //       style: 'cancel',
-    //     },
-    //     {
-    //       text: 'Continue',
-    //       onPress: () => uploadPostToFirebase,
-    //     },
-    //   ]
-    // );
     uploadPostToFirebase(groupArr);
   };
-
-  // const newGroup = Object.assign({}, ...groupSet);
-  // let groupArr = [];
-  // groupArr.push(newGroup);
 
   const getUserName = () => {
     const user = firebase.auth().currentUser;
@@ -114,10 +95,7 @@ export default function AddQuizGroup({ navigation }) {
     getUserName();
   }, []);
 
-  console.log('currentLoggedInUser', currentLoggedInUser);
-  console.log('group_name:', group_name);
-  console.log('GROUPS', groups);
-  console.log('groups:', groups);
+  // console.log('currentLoggedInUser', currentLoggedInUser);
 
   return (
     <View style={styles.addQuizGroupContainer}>
