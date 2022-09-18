@@ -12,13 +12,20 @@ export default function Home({ navigation }) {
   const { groups, group_name, current_user } = useSelector(
     (state) => state.Reducer
   );
+  let groupLength;
+
+  if (groups) {
+    groupLength = groups.length;
+  }
+
   const dispatch = useDispatch();
 
   useEffect(() => {
     const unsubscribe = db
       .collectionGroup('posts')
-      .orderBy('timestamp', 'desc')
+      // .orderBy('timestamp', 'desc')
       .onSnapshot((snapshot) => {
+        console.log(snapshot);
         dispatch(
           setGroups(
             snapshot.docs.map((post) => ({ id: post.id, ...post.data() }))
@@ -26,9 +33,9 @@ export default function Home({ navigation }) {
         );
       });
     return unsubscribe;
-  }, []);
+  }, [groupLength]);
 
-  // console.log('current_user', current_user);
+  console.log('current_user', current_user);
   console.log('GROUPS', groups);
 
   return (
@@ -38,9 +45,14 @@ export default function Home({ navigation }) {
         style={styles.background}
       >
         <View style={styles.innerContainer}>
-          <GroupContainer label="History" />
-          <GroupContainer label="Biology" />
-          <GroupContainer label="Chemestry" />
+          {groups &&
+            groups.map((group, index) => {
+              return <GroupContainer label={group.subject_name} key={index} />;
+            })}
+
+          {/* <GroupContainer label="History" /> */}
+          {/* <GroupContainer label="Biology" /> */}
+          {/* <GroupContainer label="Chemestry" /> */}
         </View>
       </LinearGradient>
     </View>
