@@ -6,18 +6,15 @@ import {
   Alert,
   Pressable,
   TouchableOpacity,
-  ImageBackground,
   TextInput,
   Image,
   KeyboardAvoidingView,
+  Keyboard,
   Platform,
   TouchableWithoutFeedback,
 } from 'react-native';
-
 import { LinearGradient } from 'expo-linear-gradient';
-import { firebase, db } from '../firebase';
-// import { useSelector, useDispatch } from 'react-redux';
-// import { setCurrentUser, setToken } from '../redux/actions';
+import { firebase } from '../firebase';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import Validator from 'email-validator';
@@ -26,10 +23,6 @@ import appLogo from '../assets/quizzie-logo.png';
 const quizzieLogo = Image.resolveAssetSource(appLogo).uri;
 
 export default function Login({ navigation }) {
-  // const dispatch = useDispatch();
-  // const { current_user, token } = useSelector((state) => state.Reducer);
-  // const [userInfo, setUserInfo] = useState(null);
-
   const loginFormSchema = Yup.object().shape({
     email: Yup.string().email().required('An email is required'),
     password: Yup.string()

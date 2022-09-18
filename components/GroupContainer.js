@@ -5,23 +5,21 @@ import {
   View,
   Dimensions,
   TouchableHighlight,
+  Pressable,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
-// const plusIcon = Image.resolveAssetSource(PLUS_ICON).uri;
-
-export default function GroupContainer({ label, id, question, answer }) {
+export default function GroupContainer({ label, handleQuizStatus }) {
   return (
-    <TouchableHighlight underlayColor="#f7797d">
-      <View style={styles.groupContainer}>
-        <View style={styles.innerContainer}>
-          <Text style={styles.textStyle}> {label} </Text>
-          <Text style={styles.textStyle}> {id} </Text>
-          <Text style={styles.textStyle}> {question} </Text>
-          <Text style={styles.textStyle}> {answer} </Text>
+    <Pressable onPress={handleQuizStatus}>
+      <TouchableHighlight underlayColor="#f7797d">
+        <View style={styles.groupContainer}>
+          <View style={styles.innerContainer}>
+            <Text style={styles.textStyle}> {label} Quiz </Text>
+          </View>
         </View>
-      </View>
-    </TouchableHighlight>
+      </TouchableHighlight>
+    </Pressable>
   );
 }
 
@@ -39,16 +37,16 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 2,
     borderColor: '#dd3e54',
-    width: 120,
-    height: 120,
+    width: 145,
+    height: 110,
   },
 
   innerContainer: {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    width: 118,
-    height: 118,
+    width: 140,
+    height: 108,
     // flexDirection: 'column',
     // marginTop: '15%',
     // marginBottom: '10%',

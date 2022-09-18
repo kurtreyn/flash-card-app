@@ -32,7 +32,7 @@ export default function ControlPanel({
               onPress={handleGroupNameStatus}
               style={styles.addTopMargin}
             >
-              <HorizontalButton label={'Add Group Name'} bgColor={'#d81159'} />
+              <HorizontalButton label={'Add Group Name'} bgColor={'#FF416C'} />
             </Pressable>
           )}
 
@@ -56,12 +56,6 @@ export default function ControlPanel({
               <HorizontalButton label={'Reset'} bgColor={'#d81159'} />
             </Pressable>
           )}
-
-          {/* {hasNameOfGroup && (
-            <Pressable onPress={null}>
-              <HorizontalButton label={'Reset'} bgColor={'#d81159'} />
-            </Pressable>
-          )} */}
         </View>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
