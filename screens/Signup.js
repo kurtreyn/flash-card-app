@@ -55,7 +55,7 @@ export default function Signup({ navigation }) {
           profile_picture: profileAvatar,
           photoURL: profileAvatar,
         })
-        .then(() => navigation.navigate({ name: 'Home' }));
+        .then(() => navigation.navigate({ name: 'Login' }));
     } catch (error) {
       Alert.alert('Uh oh...', error.message);
     }

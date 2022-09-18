@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Text, StyleSheet, View } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -8,13 +8,35 @@ import GroupContainer from '../components/GroupContainer';
 // const plusIcon = Image.resolveAssetSource(PLUS_ICON).uri;
 
 export default function Home({ navigation }) {
+  const [currentLoggedInUser, setCurrentLoggedInUser] = useState(null);
   const { groups, group_name, current_user } = useSelector(
     (state) => state.Reducer
   );
 
-  console.log('current_user', current_user);
+  const getUserName = () => {
+    const user = firebase.auth().currentUser;
+    const unsubscribe = db
+      .collection('users')
+      .where('owner_uid', '==', user.uid)
+      .limit(1)
+      .onSnapshot((snapshot) =>
+        snapshot.docs.map((doc) => {
+          setCurrentLoggedInUser({
+            username: doc.data().username,
+            profilePicture: doc.data().profile_picture,
+          });
+        })
+      );
+    return unsubscribe;
+  };
 
-  console.log('GROUPS', groups);
+  // console.log('current_user', current_user);
+  // console.log('GROUPS', groups);
+
+  useEffect(() => {
+    getUserName();
+  }, []);
+
   return (
     <View style={styles.homeContainer}>
       <LinearGradient

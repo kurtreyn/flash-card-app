@@ -1,22 +1,24 @@
-import React, { useState } from 'react';
-import { Text, StyleSheet, View } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { Text, StyleSheet, View, Alert } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { setGroups, setHasGroupName, setGroupName } from '../redux/actions';
 import { LinearGradient } from 'expo-linear-gradient';
+import { firebase, db } from '../firebase';
 import InputContainer from '../components/InputContainer';
 import ControlPanel from '../components/ControlPanel';
 
-export default function AddQuizGroup({ navigate }) {
+export default function AddQuizGroup({ navigation }) {
   const dispatch = useDispatch();
   const { groups, has_group_name, group_name } = useSelector(
     (state) => state.Reducer
   );
+  const [currentLoggedInUser, setCurrentLoggedInUser] = useState(null);
   const [nameOfGroup, setNameOfGroup] = useState('');
   const [question, setQuestion] = useState('');
   const [answer, setAnswer] = useState('');
   const [number, setNumber] = useState(0);
-  const [groupSet, setGroupSet] = useState(null);
-  // let questionAnswerArr = [];
+  const [groupSet, setGroupSet] = useState([]);
+  let questionAnswerArr = [];
 
   const handleGroupNameStatus = () => {
     dispatch(setHasGroupName(true));
@@ -47,18 +49,74 @@ export default function AddQuizGroup({ navigate }) {
     setNumber(number + 1);
   };
 
-  const handleAddGroup = () => {
+  const uploadPostToFirebase = (posts) => {
+    const unsubscribe = db
+      .collection('users')
+      .doc(firebase.auth().currentUser.email)
+      .collection('posts')
+      .add({
+        user: currentLoggedInUser.username,
+        profile_picture: currentLoggedInUser.profilePicture,
+        owner_uid: firebase.auth().currentUser.uid,
+        owner_email: firebase.auth().currentUser.email,
+        subject_name: group_name,
+        post_q_a: posts,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      })
+      .then(() => navigation.navigate({ name: 'Home' }));
+    return unsubscribe;
+  };
+
+  const handleSubmitGroup = () => {
     const newGroup = Object.assign({}, ...groupSet);
     let groupArr = [];
     groupArr.push(newGroup);
     dispatch(setGroups(groupArr));
+    // Alert.alert(
+    //   'Please confirm you want save',
+    //   [
+    //     {
+    //       text: 'Cancel',
+    //       onPress: () => console.log('Cancelled'),
+    //       style: 'cancel',
+    //     },
+    //     {
+    //       text: 'Continue',
+    //       onPress: () => uploadPostToFirebase,
+    //     },
+    //   ]
+    // );
+    uploadPostToFirebase(groupArr);
   };
 
-  const newGroup = Object.assign({}, ...groupSet);
-  let groupArr = [];
-  groupArr.push(newGroup);
+  // const newGroup = Object.assign({}, ...groupSet);
+  // let groupArr = [];
+  // groupArr.push(newGroup);
 
-  // console.log('group_name:', group_name);
+  const getUserName = () => {
+    const user = firebase.auth().currentUser;
+    const unsubscribe = db
+      .collection('users')
+      .where('owner_uid', '==', user.uid)
+      .limit(1)
+      .onSnapshot((snapshot) =>
+        snapshot.docs.map((doc) => {
+          setCurrentLoggedInUser({
+            username: doc.data().username,
+            profilePicture: doc.data().profile_picture,
+          });
+        })
+      );
+    return unsubscribe;
+  };
+
+  useEffect(() => {
+    getUserName();
+  }, []);
+
+  console.log('currentLoggedInUser', currentLoggedInUser);
+  console.log('group_name:', group_name);
+  console.log('GROUPS', groups);
   console.log('groups:', groups);
 
   return (
@@ -82,7 +140,7 @@ export default function AddQuizGroup({ navigate }) {
             handleGroupNameStatus={handleGroupNameStatus}
             handleReset={handleReset}
             handleAddQandA={handleAddQandA}
-            handleAddGroup={handleAddGroup}
+            handleSubmitGroup={handleSubmitGroup}
           />
         </View>
       </LinearGradient>
