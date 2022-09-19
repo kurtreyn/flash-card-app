@@ -77,10 +77,14 @@ export default function Quiz({ navigation, subjectName, group }) {
       setDisabled(true);
       return;
     }
+    console.log('score init:', score);
+    console.log('answer', answer);
+    console.log('rightAnswer', rightAnswer);
     if (answer === rightAnswer) {
-      //   console.log('ANSWERED:', answer);
+      // console.log('ANSWERED:', answer);
       setScore(score + 1);
     }
+
     // console.log('answer:', answer);
 
     if (results.length === 0) {
@@ -128,7 +132,7 @@ export default function Quiz({ navigation, subjectName, group }) {
   //   console.log('questions', questions);
   //   console.log('answers', answers);
   //   console.log('options', options);
-  //   console.log('score', score);
+  console.log('score', score);
   //   console.log('index:', index);
   //   console.log('results', results);
   //   console.log('final_results', final_results);

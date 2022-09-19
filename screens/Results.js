@@ -19,13 +19,9 @@ import HorizontalButton from '../components/HorizontalButton';
 
 export default function Results({ navigation }) {
   const dispatch = useDispatch();
-  const {
-    final_results,
-    final_score,
-    points_possible,
-    active_group,
-    quiz_reset,
-  } = useSelector((state) => state.Reducer);
+  const { final_results, final_score, points_possible } = useSelector(
+    (state) => state.Reducer
+  );
 
   const resetQuiz = () => {
     dispatch(setActiveGroup(null));
@@ -35,8 +31,6 @@ export default function Results({ navigation }) {
 
     navigation.navigate({ name: 'Home' });
   };
-
-  // console.log('final_results', final_results);
 
   return (
     <View style={styles.resultsContainer}>
