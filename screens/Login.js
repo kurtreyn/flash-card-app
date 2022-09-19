@@ -41,9 +41,9 @@ export default function Login({ navigation }) {
         .signInWithEmailAndPassword(email, password)
         .then((response) => {
           console.log('Firebase Login Successful', email, password);
-          if (response) {
-            navigation.navigate({ name: 'Home' });
-          }
+          // if (response) {
+          //   navigation.navigate({ name: 'Home' });
+          // }
         });
     } catch (error) {
       Alert.alert(
@@ -82,14 +82,14 @@ export default function Login({ navigation }) {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={styles.loginContainer}
     >
-      <LinearGradient
-        colors={['#2980B9', '#6DD5FA', '#FFFFFF']}
-        style={styles.background}
-      >
-        <View style={styles.logoContainer}>
-          <Image source={{ uri: quizzieLogo, height: 150, width: 200 }} />
-        </View>
-        <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+        <LinearGradient
+          colors={['#2980B9', '#6DD5FA', '#FFFFFF']}
+          style={styles.background}
+        >
+          <View style={styles.logoContainer}>
+            <Image source={{ uri: quizzieLogo, height: 150, width: 200 }} />
+          </View>
           <View style={styles.wrapper}>
             <Formik
               initialValues={{ email: '', password: '' }}
@@ -195,8 +195,8 @@ export default function Login({ navigation }) {
               )}
             </Formik>
           </View>
-        </TouchableWithoutFeedback>
-      </LinearGradient>
+        </LinearGradient>
+      </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
   );
 }

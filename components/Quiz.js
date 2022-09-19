@@ -38,7 +38,7 @@ export default function Quiz({ navigation, subjectName, group }) {
   };
 
   const runQuiz = (currentObj) => {
-    console.log(`index is: ${index}, length is: ${post_q_a.length}`);
+    // console.log(`index is: ${index}, length is: ${post_q_a.length}`);
     if (index === post_q_a.length) {
       setDisabled(true);
       return;

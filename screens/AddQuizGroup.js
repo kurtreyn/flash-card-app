@@ -1,5 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Text, StyleSheet, View, Alert } from 'react-native';
+import {
+  Text,
+  StyleSheet,
+  View,
+  Alert,
+  KeyboardAvoidingView,
+  Keyboard,
+  Platform,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { setHasGroupName, setGroupName } from '../redux/actions';
 import { LinearGradient } from 'expo-linear-gradient';
