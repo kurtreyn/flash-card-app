@@ -4,16 +4,17 @@ import AnswerButton from './AnswerButton';
 import HorizontalButton from './HorizontalButton';
 
 export default function Quiz({ subjectName, group }) {
-  //   const [questions, setQuestions] = useState(null);
-  //   const [answers, setAnswers] = useState(null);
   const [options, setOptions] = useState([]);
   const [showResults, setShowResults] = useState(false);
   const [disabled, setDisabled] = useState(false);
   const [index, setIndex] = useState(0);
   const [score, setScore] = useState(0);
+  const [results, setResults] = useState([]);
+  const [rightAnswer, setRightAnswer] = useState('');
+  const [currentQuestion, setCurrentQuestion] = useState('');
   const { post_q_a } = group;
   let answers = post_q_a.map((answer) => answer.correct_answer);
-  let questions = post_q_a.map((question) => question.question);
+  //   let questions = post_q_a.map((question) => question.question);
 
   const shuffle = (array) => {
     for (let i = array.length - 1; i > 0; i--) {
@@ -22,14 +23,6 @@ export default function Quiz({ subjectName, group }) {
     }
     return array;
   };
-
-  //   const generateOptionsAndShuffle = (_question) => {
-  //     const options = [..._question.incorrect_answers];
-  //     options.push(_question.correct_answer);
-  //     shuffle(options);
-
-  //     return options;
-  //   };
 
   const runQuiz = (currentObj) => {
     let wrongAnswers = [];
@@ -54,14 +47,11 @@ export default function Quiz({ subjectName, group }) {
       correctAnswer: correct_answer,
       answerOptions: shuffle(answerOptions),
     };
-
-    // console.log('wrongAnswers', wrongAnswers);
-    // console.log(currentObj.correct_answer);
-    // console.log(correct_answer);
-    // console.log(question);
-    // console.log('answerOptions', answerOptions);
-    // console.log('qSet', qSet);
+    setCurrentQuestion(question);
+    setRightAnswer(correct_answer);
     setOptions([qSet]);
+    console.log('index was:', index);
+    setIndex(index + 1);
   };
 
   useEffect(() => {
@@ -73,13 +63,36 @@ export default function Quiz({ subjectName, group }) {
       setDisabled(true);
       return;
     }
-    if (answer === options.correct_answer) {
-      console.log('ANSWERED:', answer);
+    if (answer === rightAnswer) {
+      //   console.log('ANSWERED:', answer);
       setScore(score + 1);
     }
-    console.log('answer:', answer);
+    // console.log('answer:', answer);
+    // console.log('optons.correct_answer', options.correctAnswer);
 
-    setIndex(index + 1);
+    // console.log(correct_answer, question);
+
+    if (results.length === 0) {
+      setResults([
+        {
+          askedQuestion: currentQuestion,
+          selectedAnswer: answer,
+          correctAnswer: rightAnswer,
+        },
+      ]);
+    } else {
+      setResults((prevState) => {
+        return [
+          ...prevState,
+          {
+            askedQuestion: currentQuestion,
+            selectedAnswer: answer,
+            correctAnswer: rightAnswer,
+          },
+        ];
+      });
+    }
+
     runQuiz(post_q_a[index]);
   };
 
@@ -90,6 +103,8 @@ export default function Quiz({ subjectName, group }) {
   //   console.log('answers', answers);
   //   console.log('options', options);
   //   console.log('score', score);
+  //   console.log('index:', index);
+  //   console.log('results', results);
 
   return (
     <View style={styles.quizContainer}>
@@ -133,7 +148,12 @@ export default function Quiz({ subjectName, group }) {
           })}
 
           <Pressable onPress={null} style={styles.addTopMargin}>
-            <HorizontalButton label={'End Quiz'} bgColor={'#FF416C'} />
+            {!disabled && (
+              <HorizontalButton label={'End Quiz'} bgColor={'#FF416C'} />
+            )}
+            {disabled && (
+              <HorizontalButton label={'View Results'} bgColor={'#FF416C'} />
+            )}
           </Pressable>
         </View>
       </View>

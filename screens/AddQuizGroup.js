@@ -50,13 +50,6 @@ export default function AddQuizGroup({ navigation }) {
         ];
       });
     }
-    // if (previousQuestions.length === 0) {
-    //   setPreviousQuestions([question]);
-    // } else {
-    //   setPreviousQuestions((prevState) => {
-    //     return [...prevState, question];
-    //   });
-    // }
 
     setQuestion('');
     setAnswer('');
