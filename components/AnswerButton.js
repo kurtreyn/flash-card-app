@@ -1,24 +1,20 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Text, StyleSheet, View, TouchableOpacity } from 'react-native';
 
-export default function AnswerButton({ answer, onPress }) {
-  const answerRef = useRef(answer);
-
+export default function AnswerButton({ answer, onPress, disable }) {
   return (
     <View style={styles.answerButtonContainer}>
       <TouchableOpacity
         styles={styles.answerButtonContainer}
         onPress={onPress}
-        ref={answerRef}
+        disabled={disable}
       >
         <LinearGradient
           colors={['#8A2387', '#E94057', '#F27121']}
           style={styles.gradient}
         >
-          <Text style={styles.answerButtonLabel} value={answer}>
-            {answer}
-          </Text>
+          <Text style={styles.answerButtonLabel}>{answer}</Text>
         </LinearGradient>
       </TouchableOpacity>
     </View>

@@ -8,7 +8,9 @@ export default function Quiz({ subjectName, group }) {
   //   const [answers, setAnswers] = useState(null);
   const [options, setOptions] = useState([]);
   const [showResults, setShowResults] = useState(false);
+  const [disabled, setDisabled] = useState(false);
   const [index, setIndex] = useState(0);
+  const [score, setScore] = useState(0);
   const { post_q_a } = group;
   let answers = post_q_a.map((answer) => answer.correct_answer);
   let questions = post_q_a.map((question) => question.question);
@@ -18,25 +20,18 @@ export default function Quiz({ subjectName, group }) {
       const j = Math.floor(Math.random() * (i + 1));
       [array[i], array[j]] = [array[j], array[i]];
     }
+    return array;
   };
 
-  const generateOptionsAndShuffle = (_question) => {
-    const options = [..._question.incorrect_answers];
-    options.push(_question.correct_answer);
-    shuffle(options);
+  //   const generateOptionsAndShuffle = (_question) => {
+  //     const options = [..._question.incorrect_answers];
+  //     options.push(_question.correct_answer);
+  //     shuffle(options);
 
-    return options;
-  };
+  //     return options;
+  //   };
 
   const runQuiz = (currentObj) => {
-    console.log('RUNNING QUIZ');
-    // let wrongAnswers = answers.filter((answer) => {
-    //   if (answer != currentObj.correct_answer) {
-    //     for (let i = 0; i <= 3; i++) {
-    //       return answers[i];
-    //     }
-    //   }
-    // });
     let wrongAnswers = [];
     for (let i = 0; i <= answers.length; i++) {
       if (answers[i] != currentObj.correct_answer) {
@@ -47,17 +42,45 @@ export default function Quiz({ subjectName, group }) {
       }
     }
 
-    console.log('wrongAnswers', wrongAnswers);
-    console.log(currentObj.correct_answer);
-    let opt;
+    let { correct_answer } = currentObj;
+    let { question } = currentObj;
+
+    let answerOptions = [];
+    wrongAnswers.forEach((answer) => answerOptions.push(answer));
+    answerOptions.push(correct_answer);
+
+    let qSet = {
+      question: question,
+      correctAnswer: correct_answer,
+      answerOptions: shuffle(answerOptions),
+    };
+
+    // console.log('wrongAnswers', wrongAnswers);
+    // console.log(currentObj.correct_answer);
+    // console.log(correct_answer);
+    // console.log(question);
+    // console.log('answerOptions', answerOptions);
+    // console.log('qSet', qSet);
+    setOptions([qSet]);
   };
 
   useEffect(() => {
-    runQuiz(post_q_a[0]);
+    runQuiz(post_q_a[index]);
   }, []);
 
-  const handleAnswer = (e) => {
-    console.log(e.target.value);
+  const handleAnswer = (answer) => {
+    if (index === post_q_a.length) {
+      setDisabled(true);
+      return;
+    }
+    if (answer === options.correct_answer) {
+      console.log('ANSWERED:', answer);
+      setScore(score + 1);
+    }
+    console.log('answer:', answer);
+
+    setIndex(index + 1);
+    runQuiz(post_q_a[index]);
   };
 
   //   console.log('group', group);
@@ -65,7 +88,8 @@ export default function Quiz({ subjectName, group }) {
   // console.log('post_q_a', post_q_a);
   //   console.log('questions', questions);
   //   console.log('answers', answers);
-  console.log('options', options);
+  //   console.log('options', options);
+  //   console.log('score', score);
 
   return (
     <View style={styles.quizContainer}>
@@ -74,20 +98,40 @@ export default function Quiz({ subjectName, group }) {
       </View>
 
       <View style={styles.questionSection}>
-        <Text style={styles.questionText}>{subjectName}?</Text>
+        {options.map((option) => {
+          return <Text style={styles.questionText}>{option.question}?</Text>;
+        })}
       </View>
 
       <View style={styles.answerSection}>
-        {/* <View style={styles.answersContainer}>
-          <Text style={styles.answerText}>
-            What is the capital of the United States?
-          </Text>
-        </View> */}
         <View style={styles.buttonContainer}>
-          <AnswerButton answer="Yes" onPress={handleAnswer} />
-          <AnswerButton answer="No" />
-          <AnswerButton answer="Jesus" />
-          <AnswerButton answer="Satan" />
+          {options.map((option, index) => {
+            return (
+              <View>
+                <AnswerButton
+                  answer={option.answerOptions[0]}
+                  onPress={() => handleAnswer(option.answerOptions[0])}
+                  disable={disabled}
+                />
+                <AnswerButton
+                  answer={option.answerOptions[1]}
+                  onPress={() => handleAnswer(option.answerOptions[1])}
+                  disable={disabled}
+                />
+                <AnswerButton
+                  answer={option.answerOptions[2]}
+                  onPress={() => handleAnswer(option.answerOptions[2])}
+                  disable={disabled}
+                />
+                <AnswerButton
+                  answer={option.answerOptions[3]}
+                  onPress={() => handleAnswer(option.answerOptions[3])}
+                  disable={disabled}
+                />
+              </View>
+            );
+          })}
+
           <Pressable onPress={null} style={styles.addTopMargin}>
             <HorizontalButton label={'End Quiz'} bgColor={'#FF416C'} />
           </Pressable>
