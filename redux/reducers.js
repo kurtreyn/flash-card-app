@@ -9,6 +9,7 @@ import {
   SET_FINAL_RESULTS,
   SET_FINAL_SCORE,
   SET_ACTIVE_GROUP,
+  SET_POINTS_POSSIBLE,
 } from './actions';
 
 const initialState = {
@@ -20,6 +21,7 @@ const initialState = {
   has_group_name: false,
   final_results: null,
   final_score: null,
+  points_possible: null,
   active_group: null,
 };
 
@@ -43,6 +45,8 @@ const Reducer = (state = initialState, action) => {
       return { ...state, final_results: action.payload };
     case SET_FINAL_SCORE:
       return { ...state, final_score: action.payload };
+    case SET_POINTS_POSSIBLE:
+      return { ...state, points_possible: action.payload };
     default:
       return state;
   }

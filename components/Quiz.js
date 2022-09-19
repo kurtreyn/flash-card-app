@@ -7,7 +7,11 @@ import {
 } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { setFinalResults, setFinalScore } from '../redux/actions';
+import {
+  setFinalResults,
+  setFinalScore,
+  setPointsPossible,
+} from '../redux/actions';
 import AnswerButton from './AnswerButton';
 import HorizontalButton from './HorizontalButton';
 
@@ -23,6 +27,7 @@ export default function Quiz({ navigation, subjectName, group }) {
   const [currentQuestion, setCurrentQuestion] = useState('');
   const { post_q_a } = group;
   let answers = post_q_a.map((answer) => answer.correct_answer);
+  let pointsPossible = answers.length;
 
   const shuffle = (array) => {
     for (let i = array.length - 1; i > 0; i--) {
@@ -67,16 +72,6 @@ export default function Quiz({ navigation, subjectName, group }) {
     setIndex(index + 1);
   };
 
-  useEffect(() => {
-    if (!disabled) {
-      runQuiz(post_q_a[index]);
-    }
-    if (disabled) {
-      dispatch(setFinalResults(results));
-      dispatch(setFinalScore(score));
-    }
-  }, [disabled]);
-
   const handleAnswer = (answer) => {
     if (index === post_q_a.length) {
       setDisabled(true);
@@ -111,6 +106,21 @@ export default function Quiz({ navigation, subjectName, group }) {
 
     runQuiz(post_q_a[index]);
   };
+
+  const handleEndQuiz = () => {
+    setDisabled(true);
+  };
+
+  useEffect(() => {
+    if (!disabled) {
+      runQuiz(post_q_a[index]);
+    }
+    if (disabled) {
+      dispatch(setFinalResults(results));
+      dispatch(setFinalScore(score));
+      dispatch(setPointsPossible(pointsPossible));
+    }
+  }, [disabled]);
 
   //   console.log('group', group);
   //   console.log('subjectName', subjectName);
@@ -172,9 +182,9 @@ export default function Quiz({ navigation, subjectName, group }) {
 
           <View style={styles.addTopMargin}>
             {!disabled && (
-              <Pressable onPress={null}>
+              <TouchableOpacity onPress={handleEndQuiz}>
                 <HorizontalButton label={'End Quiz'} bgColor={'#FF416C'} />
-              </Pressable>
+              </TouchableOpacity>
             )}
             {disabled && (
               <TouchableOpacity

@@ -3,14 +3,18 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 
 export default function Results({ navigation }) {
-  const { final_results, final_score } = useSelector((state) => state.Reducer);
+  const { final_results, final_score, points_possible } = useSelector(
+    (state) => state.Reducer
+  );
 
   // console.log('final_results', final_results);
 
   return (
     <View style={styles.resultsContainer}>
       <View style={styles.resultsHeader}>
-        <Text style={styles.finalScore}>Final Score: {final_score}</Text>
+        <Text style={styles.finalScore}>
+          Final Score: {final_score} out of {points_possible}
+        </Text>
       </View>
       {!final_results && (
         <View style={styles.noResultsContainer}>
