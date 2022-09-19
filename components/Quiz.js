@@ -1,20 +1,26 @@
-import { StyleSheet, Text, View, Pressable } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Pressable,
+  TouchableOpacity,
+} from 'react-native';
 import React, { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { setFinalResults, setFinalScore } from '../redux/actions';
 import AnswerButton from './AnswerButton';
 import HorizontalButton from './HorizontalButton';
-import Results from './Results';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 
-export default function Quiz({ subjectName, group }) {
+export default function Quiz({ navigation, subjectName, group }) {
+  //   const { final_results } = useSelector((state) => state.Reducer);
+  const dispatch = useDispatch();
   const [options, setOptions] = useState([]);
-  const [showResults, setShowResults] = useState(false);
   const [disabled, setDisabled] = useState(false);
   const [index, setIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [results, setResults] = useState([]);
   const [rightAnswer, setRightAnswer] = useState('');
   const [currentQuestion, setCurrentQuestion] = useState('');
-  const [wrongAnswerArr, setWrongAnswerArr] = useState();
   const { post_q_a } = group;
   let answers = post_q_a.map((answer) => answer.correct_answer);
 
@@ -27,7 +33,6 @@ export default function Quiz({ subjectName, group }) {
   };
 
   const runQuiz = (currentObj) => {
-    // setWrongAnswerArr(answers);
     let limit = 3;
     let { correct_answer } = currentObj;
     let { question } = currentObj;
@@ -65,6 +70,10 @@ export default function Quiz({ subjectName, group }) {
   useEffect(() => {
     if (!disabled) {
       runQuiz(post_q_a[index]);
+    }
+    if (disabled) {
+      dispatch(setFinalResults(results));
+      dispatch(setFinalScore(score));
     }
   }, [disabled]);
 
@@ -111,12 +120,13 @@ export default function Quiz({ subjectName, group }) {
   //   console.log('options', options);
   //   console.log('score', score);
   //   console.log('index:', index);
-  console.log('results', results);
+  //   console.log('results', results);
+  //   console.log('final_results', final_results);
 
-  const handleShowResults = () => {
-    console.log('showing results');
-    setShowResults(true);
-  };
+  //   const handleShowResults = () => {
+  //     console.log('showing results');
+  //     ;
+  //   };
 
   return (
     <View style={styles.quizContainer}>
@@ -126,7 +136,6 @@ export default function Quiz({ subjectName, group }) {
 
       <View style={styles.questionSection}>
         {!disabled &&
-          !showResults &&
           options.map((option) => {
             return <Text style={styles.questionText}>{option.question}?</Text>;
           })}
@@ -134,62 +143,49 @@ export default function Quiz({ subjectName, group }) {
 
       <View style={styles.answerSection}>
         <View style={styles.buttonContainer}>
-          {!disabled &&
-            !showResults &&
-            options.map((option, index) => {
-              return (
-                <View>
-                  <AnswerButton
-                    answer={option.answerOptions[0]}
-                    onPress={() => handleAnswer(option.answerOptions[0])}
-                    disable={disabled}
-                  />
-                  <AnswerButton
-                    answer={option.answerOptions[1]}
-                    onPress={() => handleAnswer(option.answerOptions[1])}
-                    disable={disabled}
-                  />
-                  <AnswerButton
-                    answer={option.answerOptions[2]}
-                    onPress={() => handleAnswer(option.answerOptions[2])}
-                    disable={disabled}
-                  />
-                  <AnswerButton
-                    answer={option.answerOptions[3]}
-                    onPress={() => handleAnswer(option.answerOptions[3])}
-                    disable={disabled}
-                  />
-                </View>
-              );
-            })}
+          {options.map((option, index) => {
+            return (
+              <View>
+                <AnswerButton
+                  answer={option.answerOptions[0]}
+                  onPress={() => handleAnswer(option.answerOptions[0])}
+                  disable={disabled}
+                />
+                <AnswerButton
+                  answer={option.answerOptions[1]}
+                  onPress={() => handleAnswer(option.answerOptions[1])}
+                  disable={disabled}
+                />
+                <AnswerButton
+                  answer={option.answerOptions[2]}
+                  onPress={() => handleAnswer(option.answerOptions[2])}
+                  disable={disabled}
+                />
+                <AnswerButton
+                  answer={option.answerOptions[3]}
+                  onPress={() => handleAnswer(option.answerOptions[3])}
+                  disable={disabled}
+                />
+              </View>
+            );
+          })}
 
           <View style={styles.addTopMargin}>
             {!disabled && (
-              <Pressable onPress={() => setShowResults(true)}>
+              <Pressable onPress={null}>
                 <HorizontalButton label={'End Quiz'} bgColor={'#FF416C'} />
               </Pressable>
             )}
             {disabled && (
-              <Pressable onPress={handleShowResults}>
+              <TouchableOpacity
+                onPress={() => navigation.navigate({ name: 'Results' })}
+              >
                 <HorizontalButton label={'View Results'} bgColor={'#3f2b96'} />
-              </Pressable>
+              </TouchableOpacity>
             )}
           </View>
         </View>
       </View>
-
-      {showResults &&
-        results &&
-        results.map((result) => {
-          return (
-            <Results
-              score={score}
-              question={result.askedQuestion}
-              selectedAnswer={result.selectedAnswer}
-              correctAnswer={result.correctAnswer}
-            />
-          );
-        })}
     </View>
   );
 }

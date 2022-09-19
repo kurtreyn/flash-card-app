@@ -6,6 +6,9 @@ import {
   SET_LOADING,
   SET_GROUP_NAME,
   SET_HAS_GROUP_NAME,
+  SET_FINAL_RESULTS,
+  SET_FINAL_SCORE,
+  SET_ACTIVE_GROUP,
 } from './actions';
 
 const initialState = {
@@ -15,6 +18,9 @@ const initialState = {
   token: '',
   loading: false,
   has_group_name: false,
+  final_results: null,
+  final_score: null,
+  active_group: null,
 };
 
 const Reducer = (state = initialState, action) => {
@@ -23,6 +29,8 @@ const Reducer = (state = initialState, action) => {
       return { ...state, groups: action.payload };
     case SET_GROUP_NAME:
       return { ...state, group_name: action.payload };
+    case SET_ACTIVE_GROUP:
+      return { ...state, active_group: action.payload };
     case SET_HAS_GROUP_NAME:
       return { ...state, has_group_name: action.payload };
     case SET_CURRENT_USER:
@@ -31,6 +39,10 @@ const Reducer = (state = initialState, action) => {
       return { ...state, token: action.payload };
     case SET_LOADING:
       return { ...state, loading: action.payload };
+    case SET_FINAL_RESULTS:
+      return { ...state, final_results: action.payload };
+    case SET_FINAL_SCORE:
+      return { ...state, final_score: action.payload };
     default:
       return state;
   }
