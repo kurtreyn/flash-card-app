@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Text, StyleSheet, View, Alert } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
-import { setGroups, setHasGroupName, setGroupName } from '../redux/actions';
+import { setHasGroupName, setGroupName } from '../redux/actions';
 import { LinearGradient } from 'expo-linear-gradient';
 import { firebase, db } from '../firebase';
 import InputContainer from '../components/InputContainer';

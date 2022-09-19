@@ -13,6 +13,8 @@ import {
   Platform,
   TouchableWithoutFeedback,
 } from 'react-native';
+import { useSelector, useDispatch } from 'react-redux';
+import { setCurrentUser } from '../redux/actions';
 import { LinearGradient } from 'expo-linear-gradient';
 import { firebase } from '../firebase';
 import { Formik } from 'formik';
@@ -23,6 +25,8 @@ import appLogo from '../assets/quizzie-logo.png';
 const quizzieLogo = Image.resolveAssetSource(appLogo).uri;
 
 export default function Login({ navigation }) {
+  const { current_user } = useSelector((state) => state.Reducer);
+  const dispatch = useDispatch();
   const loginFormSchema = Yup.object().shape({
     email: Yup.string().email().required('An email is required'),
     password: Yup.string()
@@ -60,6 +64,19 @@ export default function Login({ navigation }) {
     }
   };
 
+  const onSignout = () => {
+    firebase
+      .auth()
+      .signOut()
+      .then(() => {
+        console.log('Sign-out successful.');
+        dispatch(setCurrentUser(null));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -90,64 +107,82 @@ export default function Login({ navigation }) {
                 isValid,
               }) => (
                 <>
-                  <View
-                    style={[
-                      styles.inputField,
-                      {
-                        borderColor:
-                          values.email.length < 1 ||
-                          Validator.validate(values.email)
-                            ? '#fff'
-                            : 'red',
-                      },
-                    ]}
-                  >
-                    <TextInput
-                      placeholder="username or email"
-                      placeholderTextColor="#444"
-                      autoCapitalize="none"
-                      keyboardType="email-address"
-                      textContentType="emailAddress"
-                      autoFocus={true}
-                      onChangeText={handleChange('email')}
-                      onBlur={handleBlur('email')}
-                      value={values.email}
-                    />
-                  </View>
-                  <View
-                    style={[
-                      styles.inputField,
-                      {
-                        borderColor:
-                          1 > values.password.length ||
-                          values.password.length > 6
-                            ? '#fff'
-                            : 'red',
-                      },
-                    ]}
-                  >
-                    <TextInput
-                      placeholder="Password"
-                      placeholderTextColor="#444"
-                      autoCapitalize="none"
-                      autoCorrect={false}
-                      secureTextEntry={true}
-                      textContentType="password"
-                      onChangeText={handleChange('password')}
-                      onBlur={handleBlur('password')}
-                      value={values.password}
-                    />
-                  </View>
-                  <View style={{ alignItems: 'flex-end', marginBottom: 30 }}>
-                    <Text style={{ color: '#3c1053' }}>Forgot password?</Text>
-                  </View>
-                  <Pressable
-                    titleSize={20}
-                    style={styles.button(isValid)}
-                    onPress={handleSubmit}
-                  >
-                    <Text style={styles.buttonText}>Log In</Text>
-                  </Pressable>
+                  {!current_user && (
+                    <View
+                      style={[
+                        styles.inputField,
+                        {
+                          borderColor:
+                            values.email.length < 1 ||
+                            Validator.validate(values.email)
+                              ? '#fff'
+                              : 'red',
+                        },
+                      ]}
+                    >
+                      <TextInput
+                        placeholder="username or email"
+                        placeholderTextColor="#444"
+                        autoCapitalize="none"
+                        keyboardType="email-address"
+                        textContentType="emailAddress"
+                        autoFocus={true}
+                        onChangeText={handleChange('email')}
+                        onBlur={handleBlur('email')}
+                        value={values.email}
+                      />
+                    </View>
+                  )}
+                  {!current_user && (
+                    <View
+                      style={[
+                        styles.inputField,
+                        {
+                          borderColor:
+                            1 > values.password.length ||
+                            values.password.length > 6
+                              ? '#fff'
+                              : 'red',
+                        },
+                      ]}
+                    >
+                      <TextInput
+                        placeholder="Password"
+                        placeholderTextColor="#444"
+                        autoCapitalize="none"
+                        autoCorrect={false}
+                        secureTextEntry={true}
+                        textContentType="password"
+                        onChangeText={handleChange('password')}
+                        onBlur={handleBlur('password')}
+                        value={values.password}
+                      />
+                    </View>
+                  )}
+
+                  {!current_user && (
+                    <View style={{ alignItems: 'flex-end', marginBottom: 30 }}>
+                      <Text style={{ color: '#3c1053' }}>Forgot password?</Text>
+                    </View>
+                  )}
+                  {!current_user && (
+                    <Pressable
+                      titleSize={20}
+                      style={styles.button(isValid)}
+                      onPress={handleSubmit}
+                    >
+                      <Text style={styles.buttonText}>Log In</Text>
+                    </Pressable>
+                  )}
+                  {current_user && (
+                    <Pressable
+                      titleSize={20}
+                      style={styles.button(isValid)}
+                      onPress={onSignout}
+                    >
+                      <Text style={styles.buttonText}>Sign Out</Text>
+                    </Pressable>
+                  )}
                   <View style={styles.signupContainer}>
                     <Text>Don't have an account?</Text>
                     <TouchableOpacity
@@ -171,13 +206,6 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     alignItems: 'center',
-    // backgroundColor: '#fff',
-    // marginTop: '15%',
-    // marginBottom: '10%',
-    // borderStyle: 'solid',
-    // borderWidth: '2px',
-    // borderColor: 'blue',
-    // borderRadius: '10px',
   },
   loginHeader: {
     alignItems: 'center',
@@ -193,10 +221,6 @@ const styles = StyleSheet.create({
   logoContainer: {
     alignItems: 'center',
     marginTop: 100,
-    // borderStyle: 'solid',
-    // borderWidth: '2px',
-    // borderColor: 'blue',
-    // borderRadius: '10px',
   },
   buttonWrapper: {
     display: 'flex',
@@ -221,7 +245,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   button: (isValid) => ({
-    backgroundColor: isValid ? '#40E0D0' : '#FF0080',
+    backgroundColor: isValid ? '#1CB5E0' : '#FF0080',
     alignItems: 'center',
     justifyContent: 'center',
     minHeight: 42,

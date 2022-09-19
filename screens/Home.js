@@ -5,6 +5,7 @@ import {
   View,
   ScrollView,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { setGroups, setActiveGroup, setQuizReset } from '../redux/actions';
@@ -39,7 +40,7 @@ export default function Home({ navigation }) {
     dispatch(setQuizReset(false));
     const unsubscribe = db
       .collectionGroup('posts')
-      // .orderBy('timestamp', 'desc')
+      .orderBy('createdAt', 'desc')
       .onSnapshot((snapshot) => {
         dispatch(
           setGroups(
@@ -51,16 +52,46 @@ export default function Home({ navigation }) {
     return unsubscribe;
   };
 
-  useEffect(() => {
-    runUnsubscribe();
-    dispatch(setQuizReset(false));
-  }, [groupLength]);
+  const deleteGroup = (postId) => {
+    console.log('deleting id:', postId);
+    const unsubscribe = db
+      .collection('posts')
+      .doc(postId)
+      .delete()
+      .then(() => {
+        console.log('Document successfully deleted!');
+        runUnsubscribe();
+      })
+      .catch((error) => {
+        console.error('Error removing document: ', error);
+      });
+    return unsubscribe;
+  };
+
+  const handleDeleteQuiz = (postId) => {
+    let message = '';
+    Alert.alert(
+      'This action cannot be undone',
+      message + '\n\n What would you like to do?',
+      [
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Cancel'),
+          style: 'cancel',
+        },
+        {
+          text: 'Delete',
+          onPress: () => deleteGroup(postId),
+        },
+      ]
+    );
+  };
 
   useEffect(() => {
-    // console.log('running useEffect');
     setQuizActive(false);
     runUnsubscribe();
-  }, [quiz_reset]);
+    dispatch(setQuizReset(false));
+  }, [groupLength, quiz_reset]);
 
   // console.log('current_user', current_user);
   // console.log('GROUPS', groups);
@@ -85,7 +116,7 @@ export default function Home({ navigation }) {
 
         <View style={styles.homeHeader}>
           {!quizActive && (
-            <Text style={styles.textStyle}>
+            <Text style={[styles.textStyle, { marginTop: 40 }]}>
               Select the quiz you would like to take
             </Text>
           )}
@@ -100,6 +131,7 @@ export default function Home({ navigation }) {
                     <TouchableOpacity
                       id={group.id}
                       onPress={() => handleQuizStatus(group.id)}
+                      onLongPress={() => handleDeleteQuiz(group.id)}
                       key={index}
                     >
                       <GroupContainer
