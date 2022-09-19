@@ -14,9 +14,9 @@ export default function Quiz({ subjectName, group }) {
   const [results, setResults] = useState([]);
   const [rightAnswer, setRightAnswer] = useState('');
   const [currentQuestion, setCurrentQuestion] = useState('');
+  const [wrongAnswerArr, setWrongAnswerArr] = useState();
   const { post_q_a } = group;
   let answers = post_q_a.map((answer) => answer.correct_answer);
-  //   let questions = post_q_a.map((question) => question.question);
 
   const shuffle = (array) => {
     for (let i = array.length - 1; i > 0; i--) {
@@ -27,22 +27,36 @@ export default function Quiz({ subjectName, group }) {
   };
 
   const runQuiz = (currentObj) => {
+    setWrongAnswerArr(answers);
     let wrongAnswers = [];
     for (let i = 0; i <= answers.length; i++) {
       if (answers[i] != currentObj.correct_answer) {
         if (i > 3) {
           break;
+        } else {
+          //   console.log('pushing', answers[i]);
+          wrongAnswers.push(answers[i]);
         }
-        wrongAnswers.push(answers[i]);
       }
     }
+
+    // console.log(wrongAnswerArr);
 
     let { correct_answer } = currentObj;
     let { question } = currentObj;
 
     let answerOptions = [];
+
     wrongAnswers.forEach((answer) => answerOptions.push(answer));
     answerOptions.push(correct_answer);
+
+    // if (answerOptions.length > 4) {
+    //   for (let i = 0; i <= answerOptions.length; i++) {
+    //     if (answerOptions[i] !== currentObj.correct_answer) {
+    //       answerOptions.pop(answerOptions[i]);
+    //     }
+    //   }
+    // }
 
     let qSet = {
       question: question,
@@ -72,9 +86,6 @@ export default function Quiz({ subjectName, group }) {
       setScore(score + 1);
     }
     // console.log('answer:', answer);
-    // console.log('optons.correct_answer', options.correctAnswer);
-
-    // console.log(correct_answer, question);
 
     if (results.length === 0) {
       setResults([
@@ -105,10 +116,10 @@ export default function Quiz({ subjectName, group }) {
   // console.log('post_q_a', post_q_a);
   //   console.log('questions', questions);
   //   console.log('answers', answers);
-  //   console.log('options', options);
+  console.log('options', options);
   //   console.log('score', score);
   //   console.log('index:', index);
-  console.log('results', results);
+  //   console.log('results', results);
 
   return (
     <View style={styles.quizContainer}>
