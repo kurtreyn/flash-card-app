@@ -51,16 +51,27 @@ export default function Home({ navigation }) {
     return unsubscribe;
   };
 
-  useEffect(() => {
-    runUnsubscribe();
-    dispatch(setQuizReset(false));
-  }, [groupLength]);
+  const deleteGroup = (postId) => {
+    console.log('deleting id:', postId);
+    const unsubscribe = db
+      .collection('posts')
+      .doc(postId)
+      .delete()
+      .then(() => {
+        console.log('Document successfully deleted!');
+        runUnsubscribe();
+      })
+      .catch((error) => {
+        console.error('Error removing document: ', error);
+      });
+    return unsubscribe;
+  };
 
   useEffect(() => {
-    // console.log('running useEffect');
     setQuizActive(false);
     runUnsubscribe();
-  }, [quiz_reset]);
+    dispatch(setQuizReset(false));
+  }, [groupLength, quiz_reset]);
 
   // console.log('current_user', current_user);
   // console.log('GROUPS', groups);
@@ -100,6 +111,7 @@ export default function Home({ navigation }) {
                     <TouchableOpacity
                       id={group.id}
                       onPress={() => handleQuizStatus(group.id)}
+                      onLongPress={() => deleteGroup(group.id)}
                       key={index}
                     >
                       <GroupContainer
