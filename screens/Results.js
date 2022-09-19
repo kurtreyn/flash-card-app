@@ -1,13 +1,36 @@
-import { StyleSheet, Text, View, ScrollView } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native';
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { firebase, db } from '../firebase';
+import { useSelector, useDispatch } from 'react-redux';
+import {
+  setActiveGroup,
+  setFinalResults,
+  setFinalScore,
+  setQuizReset,
+  setGroups,
+} from '../redux/actions';
+import HorizontalButton from '../components/HorizontalButton';
 
 export default function Results({ navigation }) {
+  const dispatch = useDispatch();
   const { final_results, final_score, points_possible } = useSelector(
     (state) => state.Reducer
   );
 
-  // console.log('final_results', final_results);
+  const resetQuiz = () => {
+    dispatch(setActiveGroup(null));
+    dispatch(setFinalResults(null));
+    dispatch(setFinalScore(null));
+    dispatch(setQuizReset(true));
+
+    navigation.navigate({ name: 'Home' });
+  };
 
   return (
     <View style={styles.resultsContainer}>
@@ -41,6 +64,12 @@ export default function Results({ navigation }) {
             );
           })}
       </ScrollView>
+
+      <View style={styles.resetButtonContainer}>
+        <TouchableOpacity onPress={resetQuiz}>
+          <HorizontalButton label={'Reset Quiz'} bgColor={'#3f2b96'} />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
@@ -127,5 +156,11 @@ const styles = StyleSheet.create({
     color: 'red',
     fontSize: 25,
     marginTop: 20,
+  },
+  resetButtonContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
   },
 });

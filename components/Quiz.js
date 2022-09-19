@@ -38,6 +38,11 @@ export default function Quiz({ navigation, subjectName, group }) {
   };
 
   const runQuiz = (currentObj) => {
+    console.log(`index is: ${index}, length is: ${post_q_a.length}`);
+    if (index === post_q_a.length) {
+      setDisabled(true);
+      return;
+    }
     let limit = 3;
     let { correct_answer } = currentObj;
     let { question } = currentObj;
@@ -73,15 +78,12 @@ export default function Quiz({ navigation, subjectName, group }) {
   };
 
   const handleAnswer = (answer) => {
-    if (index === post_q_a.length) {
-      setDisabled(true);
-      return;
-    }
+    // console.log('score init:', score);
+    // console.log('answer', answer);
+    // console.log('rightAnswer', rightAnswer);
     if (answer === rightAnswer) {
-      //   console.log('ANSWERED:', answer);
       setScore(score + 1);
     }
-    // console.log('answer:', answer);
 
     if (results.length === 0) {
       setResults([
@@ -103,7 +105,6 @@ export default function Quiz({ navigation, subjectName, group }) {
         ];
       });
     }
-
     runQuiz(post_q_a[index]);
   };
 
@@ -128,7 +129,7 @@ export default function Quiz({ navigation, subjectName, group }) {
   //   console.log('questions', questions);
   //   console.log('answers', answers);
   //   console.log('options', options);
-  //   console.log('score', score);
+  // console.log('score', score);
   //   console.log('index:', index);
   //   console.log('results', results);
   //   console.log('final_results', final_results);
@@ -156,26 +157,36 @@ export default function Quiz({ navigation, subjectName, group }) {
           {options.map((option, index) => {
             return (
               <View>
-                <AnswerButton
-                  answer={option.answerOptions[0]}
-                  onPress={() => handleAnswer(option.answerOptions[0])}
-                  disable={disabled}
-                />
-                <AnswerButton
-                  answer={option.answerOptions[1]}
-                  onPress={() => handleAnswer(option.answerOptions[1])}
-                  disable={disabled}
-                />
-                <AnswerButton
-                  answer={option.answerOptions[2]}
-                  onPress={() => handleAnswer(option.answerOptions[2])}
-                  disable={disabled}
-                />
-                <AnswerButton
-                  answer={option.answerOptions[3]}
-                  onPress={() => handleAnswer(option.answerOptions[3])}
-                  disable={disabled}
-                />
+                {option.answerOptions[0] && (
+                  <AnswerButton
+                    answer={option.answerOptions[0]}
+                    onPress={() => handleAnswer(option.answerOptions[0])}
+                    disable={disabled}
+                  />
+                )}
+                {option.answerOptions[1] && (
+                  <AnswerButton
+                    answer={option.answerOptions[1]}
+                    onPress={() => handleAnswer(option.answerOptions[1])}
+                    disable={disabled}
+                  />
+                )}
+
+                {option.answerOptions[2] && (
+                  <AnswerButton
+                    answer={option.answerOptions[2]}
+                    onPress={() => handleAnswer(option.answerOptions[2])}
+                    disable={disabled}
+                  />
+                )}
+
+                {option.answerOptions[3] && (
+                  <AnswerButton
+                    answer={option.answerOptions[3]}
+                    onPress={() => handleAnswer(option.answerOptions[3])}
+                    disable={disabled}
+                  />
+                )}
               </View>
             );
           })}
