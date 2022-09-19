@@ -39,7 +39,7 @@ export default function Home({ navigation }) {
     dispatch(setQuizReset(false));
     const unsubscribe = db
       .collectionGroup('posts')
-      // .orderBy('timestamp', 'desc')
+      .orderBy('createdAt', 'desc')
       .onSnapshot((snapshot) => {
         dispatch(
           setGroups(
