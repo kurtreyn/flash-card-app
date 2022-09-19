@@ -13,7 +13,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { firebase, db } from '../firebase';
 import GroupContainer from '../components/GroupContainer';
 import Quiz from '../components/Quiz';
-import MiniButton from '../components/MiniButton';
+import AnswerButton from '../components/AnswerButton';
 
 export default function Home({ navigation }) {
   const [quizActive, setQuizActive] = useState(true);
@@ -23,8 +23,8 @@ export default function Home({ navigation }) {
 
   if (groups) {
     groupLength = groups.length;
-    const { subject_name } = groups;
-    console.log(subject_name);
+    // const { subject_name } = groups;
+    // console.log(subject_name);
   }
   const dispatch = useDispatch();
 
@@ -56,6 +56,18 @@ export default function Home({ navigation }) {
         colors={['#2980B9', '#6DD5FA', '#FFFFFF']}
         style={styles.background}
       >
+        {/* {!groups && (
+          <View style={styles.homeHeader}>
+            {!quizActive && (
+              <Text style={styles.textStyle}>
+                Looks like you don't have any quizes available. Press the pencil
+                icon at the bottom of this page to go to Add Quiz Group and add
+                a quiz.
+              </Text>
+            )}
+          </View>
+        )} */}
+
         <View style={styles.homeHeader}>
           {!quizActive && (
             <Text style={styles.textStyle}>
@@ -74,6 +86,7 @@ export default function Home({ navigation }) {
                       label={group.subject_name}
                       key={index}
                       id={group.id}
+                      group={group}
                       handleQuizStatus={handleQuizStatus}
                     />
                   );
@@ -96,9 +109,6 @@ export default function Home({ navigation }) {
               })}
           </View>
         )}
-        {/* <Pressable onPress={handleQuizStatus}>
-          <MiniButton label={'Press'} bgColor={'#FF416C'} />
-        </Pressable> */}
       </LinearGradient>
     </View>
   );

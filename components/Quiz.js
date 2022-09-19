@@ -1,34 +1,132 @@
-import { StyleSheet, Text, View, Pressable } from 'react-native';
-import React, { useState } from 'react';
-import MiniButton from './MiniButton';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Pressable,
+  TouchableOpacity,
+} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { setFinalResults, setFinalScore } from '../redux/actions';
+import AnswerButton from './AnswerButton';
 import HorizontalButton from './HorizontalButton';
 
-export default function Quiz({ group, subjectName }) {
-  //   const [questions, setQuestions] = useState(null);
-  //   const [answers, setAnswers] = useState(null);
-
-  const questions = [];
-  const answers = [];
-
+export default function Quiz({ navigation, subjectName, group }) {
+  //   const { final_results } = useSelector((state) => state.Reducer);
+  const dispatch = useDispatch();
+  const [options, setOptions] = useState([]);
+  const [disabled, setDisabled] = useState(false);
+  const [index, setIndex] = useState(0);
+  const [score, setScore] = useState(0);
+  const [results, setResults] = useState([]);
+  const [rightAnswer, setRightAnswer] = useState('');
+  const [currentQuestion, setCurrentQuestion] = useState('');
   const { post_q_a } = group;
-  //   console.log(post_q_a);
+  let answers = post_q_a.map((answer) => answer.correct_answer);
 
-  post_q_a.map((obj) => {
-    // console.log(obj);
-    let keys = Object.keys(obj);
-    // console.log(keys);
+  const shuffle = (array) => {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  };
 
-    keys.forEach((key) => {
-      let values = obj[key];
-      questions.push(key);
-      answers.push(values);
-    });
-  });
+  const runQuiz = (currentObj) => {
+    let limit = 3;
+    let { correct_answer } = currentObj;
+    let { question } = currentObj;
+    let wrongAnswers = [...answers];
+    let answerOptions = [];
+    let idx = wrongAnswers.indexOf(correct_answer);
 
-  //   console.log('GROUP:', group);
+    // console.log('wrongAnswers was', wrongAnswers);
+
+    if (idx > -1) {
+      wrongAnswers.splice(idx, 1);
+    }
+    shuffle(wrongAnswers);
+
+    // console.log('wrongAnswers is', wrongAnswers);
+    for (let i = 0; i < limit; i++) {
+      answerOptions.push(wrongAnswers[i]);
+    }
+    // console.log(answerOptions);
+    // wrongAnswers.forEach((answer) => answerOptions.push(answer));
+    answerOptions.push(correct_answer);
+    // console.log(answerOptions);
+
+    let qSet = {
+      question: question,
+      correctAnswer: correct_answer,
+      answerOptions: shuffle(answerOptions),
+    };
+    setCurrentQuestion(question);
+    setRightAnswer(correct_answer);
+    setOptions([qSet]);
+    setIndex(index + 1);
+  };
+
+  useEffect(() => {
+    if (!disabled) {
+      runQuiz(post_q_a[index]);
+    }
+    if (disabled) {
+      dispatch(setFinalResults(results));
+      dispatch(setFinalScore(score));
+    }
+  }, [disabled]);
+
+  const handleAnswer = (answer) => {
+    if (index === post_q_a.length) {
+      setDisabled(true);
+      return;
+    }
+    if (answer === rightAnswer) {
+      //   console.log('ANSWERED:', answer);
+      setScore(score + 1);
+    }
+    // console.log('answer:', answer);
+
+    if (results.length === 0) {
+      setResults([
+        {
+          askedQuestion: currentQuestion,
+          selectedAnswer: answer,
+          correctAnswer: rightAnswer,
+        },
+      ]);
+    } else {
+      setResults((prevState) => {
+        return [
+          ...prevState,
+          {
+            askedQuestion: currentQuestion,
+            selectedAnswer: answer,
+            correctAnswer: rightAnswer,
+          },
+        ];
+      });
+    }
+
+    runQuiz(post_q_a[index]);
+  };
+
+  //   console.log('group', group);
   //   console.log('subjectName', subjectName);
+  // console.log('post_q_a', post_q_a);
   //   console.log('questions', questions);
-  console.log('answers', answers);
+  //   console.log('answers', answers);
+  //   console.log('options', options);
+  //   console.log('score', score);
+  //   console.log('index:', index);
+  //   console.log('results', results);
+  //   console.log('final_results', final_results);
+
+  //   const handleShowResults = () => {
+  //     console.log('showing results');
+  //     ;
+  //   };
 
   return (
     <View style={styles.quizContainer}>
@@ -37,23 +135,55 @@ export default function Quiz({ group, subjectName }) {
       </View>
 
       <View style={styles.questionSection}>
-        <Text style={styles.questionText}>Question displayed here</Text>
+        {!disabled &&
+          options.map((option) => {
+            return <Text style={styles.questionText}>{option.question}?</Text>;
+          })}
       </View>
 
       <View style={styles.answerSection}>
-        <View style={styles.answersContainer}>
-          <Text style={styles.answerText}>
-            What is the capital of the United States?
-          </Text>
-        </View>
         <View style={styles.buttonContainer}>
-          <MiniButton option="A" answer="Yes" />
-          <MiniButton option="B" answer="No" />
-          <MiniButton option="C" answer="Jesus" />
-          <MiniButton option="D" answer="Satan" />
-          <Pressable onPress={null} style={styles.addTopMargin}>
-            <HorizontalButton label={'End Quiz'} bgColor={'#FF416C'} />
-          </Pressable>
+          {options.map((option, index) => {
+            return (
+              <View>
+                <AnswerButton
+                  answer={option.answerOptions[0]}
+                  onPress={() => handleAnswer(option.answerOptions[0])}
+                  disable={disabled}
+                />
+                <AnswerButton
+                  answer={option.answerOptions[1]}
+                  onPress={() => handleAnswer(option.answerOptions[1])}
+                  disable={disabled}
+                />
+                <AnswerButton
+                  answer={option.answerOptions[2]}
+                  onPress={() => handleAnswer(option.answerOptions[2])}
+                  disable={disabled}
+                />
+                <AnswerButton
+                  answer={option.answerOptions[3]}
+                  onPress={() => handleAnswer(option.answerOptions[3])}
+                  disable={disabled}
+                />
+              </View>
+            );
+          })}
+
+          <View style={styles.addTopMargin}>
+            {!disabled && (
+              <Pressable onPress={null}>
+                <HorizontalButton label={'End Quiz'} bgColor={'#FF416C'} />
+              </Pressable>
+            )}
+            {disabled && (
+              <TouchableOpacity
+                onPress={() => navigation.navigate({ name: 'Results' })}
+              >
+                <HorizontalButton label={'View Results'} bgColor={'#3f2b96'} />
+              </TouchableOpacity>
+            )}
+          </View>
         </View>
       </View>
     </View>
@@ -66,6 +196,8 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
+    width: '100%',
+    height: '100%',
   },
   header: {
     display: 'flex',
@@ -102,7 +234,7 @@ const styles = StyleSheet.create({
   },
   answersContainer: {
     display: 'flex',
-    flexDirection: 'row',
+    flexDirection: 'column',
     justifyContent: 'flex-start',
     alignItems: 'center',
     flexWrap: 'wrap',
@@ -114,21 +246,21 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     display: 'flex',
-    flexDirection: 'row',
+    flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    flexWrap: 'wrap',
     width: '100%',
-    position: 'absolute',
-    bottom: 80,
-    // marginTop: 200,
+    // flexWrap: 'wrap',
+    // position: 'absolute',
+    // bottom: 80,
+    marginTop: 100,
     // marginLeft: 10,
     // marginRight: 10,
     // height: '70%',
   },
   answerText: {
     color: '#000',
-    fontSize: 20,
+    fontSize: '5rem',
     marginLeft: 10,
   },
   addTopMargin: {

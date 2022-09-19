@@ -10,7 +10,7 @@ import Home from './Home';
 import Profile from './Profile';
 import AddQuizGroup from './AddQuizGroup';
 import Signup from './Signup';
-import QuizScreen from './QuizScreen';
+import Results from './Results';
 
 const screenOptions = {
   headerShown: false,
@@ -23,6 +23,7 @@ export const SignedInStack = ({ navigation }) => {
     <NavigationContainer style={styles.container}>
       <Tab.Navigator
         initialRouteName={current_user ? 'Home' : 'Login'}
+        // initialRouteName={'Login'}
         screenOptions={screenOptions}
       >
         <Tab.Screen
@@ -85,20 +86,20 @@ export const SignedInStack = ({ navigation }) => {
             ),
           }}
         />
-        {/* <Tab.Screen
-          name="Quiz"
-          component={QuizScreen}
+        <Tab.Screen
+          name="Results"
+          component={Results}
           options={{
-            tabBarLabel: 'Quiz',
+            tabBarLabel: 'Results',
             tabBarIcon: ({ color }) => (
               <MaterialCommunityIcons
-                name="head-cog-outline"
+                name="account-circle"
                 color={color}
                 size={26}
               />
             ),
           }}
-        /> */}
+        />
         <Tab.Screen
           name="Profile"
           component={Profile}
