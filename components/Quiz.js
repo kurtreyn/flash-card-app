@@ -27,36 +27,29 @@ export default function Quiz({ subjectName, group }) {
   };
 
   const runQuiz = (currentObj) => {
-    setWrongAnswerArr(answers);
-    let wrongAnswers = [];
-    for (let i = 0; i <= answers.length; i++) {
-      if (answers[i] != currentObj.correct_answer) {
-        if (i > 3) {
-          break;
-        } else {
-          //   console.log('pushing', answers[i]);
-          wrongAnswers.push(answers[i]);
-        }
-      }
-    }
-
-    // console.log(wrongAnswerArr);
-
+    // setWrongAnswerArr(answers);
+    let limit = 3;
     let { correct_answer } = currentObj;
     let { question } = currentObj;
-
+    let wrongAnswers = [...answers];
     let answerOptions = [];
+    let idx = wrongAnswers.indexOf(correct_answer);
 
-    wrongAnswers.forEach((answer) => answerOptions.push(answer));
+    console.log('wrongAnswers was', wrongAnswers);
+
+    if (idx > -1) {
+      wrongAnswers.splice(idx, 1);
+    }
+    shuffle(wrongAnswers);
+
+    // console.log('wrongAnswers is', wrongAnswers);
+    for (let i = 0; i < limit; i++) {
+      answerOptions.push(wrongAnswers[i]);
+    }
+    // console.log(answerOptions);
+    // wrongAnswers.forEach((answer) => answerOptions.push(answer));
     answerOptions.push(correct_answer);
-
-    // if (answerOptions.length > 4) {
-    //   for (let i = 0; i <= answerOptions.length; i++) {
-    //     if (answerOptions[i] !== currentObj.correct_answer) {
-    //       answerOptions.pop(answerOptions[i]);
-    //     }
-    //   }
-    // }
+    console.log(answerOptions);
 
     let qSet = {
       question: question,
@@ -66,7 +59,6 @@ export default function Quiz({ subjectName, group }) {
     setCurrentQuestion(question);
     setRightAnswer(correct_answer);
     setOptions([qSet]);
-    console.log('index was:', index);
     setIndex(index + 1);
   };
 
@@ -116,7 +108,7 @@ export default function Quiz({ subjectName, group }) {
   // console.log('post_q_a', post_q_a);
   //   console.log('questions', questions);
   //   console.log('answers', answers);
-  console.log('options', options);
+  //   console.log('options', options);
   //   console.log('score', score);
   //   console.log('index:', index);
   //   console.log('results', results);
