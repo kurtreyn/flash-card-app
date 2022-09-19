@@ -40,24 +40,26 @@ export const SignedInStack = ({ navigation }) => {
             ),
           }}
         />
-        <Tab.Screen
-          name="Signup"
-          component={Signup}
-          labelStyle={{
-            color: '#444',
-          }}
-          options={{
-            tabBarLabel: 'Signup',
-            headerShown: false,
-            tabBarIcon: ({ color }) => (
-              <MaterialCommunityIcons
-                name="clipboard-edit-outline"
-                color={color}
-                size={26}
-              />
-            ),
-          }}
-        />
+        {!current_user && (
+          <Tab.Screen
+            name="Signup"
+            component={Signup}
+            labelStyle={{
+              color: '#444',
+            }}
+            options={{
+              tabBarLabel: 'Signup',
+              headerShown: false,
+              tabBarIcon: ({ color }) => (
+                <MaterialCommunityIcons
+                  name="clipboard-edit-outline"
+                  color={color}
+                  size={26}
+                />
+              ),
+            }}
+          />
+        )}
         <Tab.Screen
           name="Home"
           component={Home}
@@ -73,13 +75,13 @@ export const SignedInStack = ({ navigation }) => {
           }}
         />
         <Tab.Screen
-          name="Add Quiz Group"
+          name="AddQuizGroup"
           component={AddQuizGroup}
           options={{
-            tabBarLabel: 'Add Quiz Group',
+            tabBarLabel: 'Create Quiz',
             tabBarIcon: ({ color }) => (
               <MaterialCommunityIcons
-                name="border-color"
+                name="fountain-pen"
                 color={color}
                 size={26}
               />
@@ -93,7 +95,7 @@ export const SignedInStack = ({ navigation }) => {
             tabBarLabel: 'Results',
             tabBarIcon: ({ color }) => (
               <MaterialCommunityIcons
-                name="account-circle"
+                name="equalizer"
                 color={color}
                 size={26}
               />

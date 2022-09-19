@@ -19,6 +19,7 @@ export default function Home({ navigation }) {
   const [quizActive, setQuizActive] = useState(true);
   const [subjectName, setSubjectName] = useState('');
   const { groups, current_user } = useSelector((state) => state.Reducer);
+
   let groupLength;
 
   if (groups) {
@@ -56,17 +57,15 @@ export default function Home({ navigation }) {
         colors={['#2980B9', '#6DD5FA', '#FFFFFF']}
         style={styles.background}
       >
-        {/* {!groups && (
-          <View style={styles.homeHeader}>
-            {!quizActive && (
-              <Text style={styles.textStyle}>
-                Looks like you don't have any quizes available. Press the pencil
-                icon at the bottom of this page to go to Add Quiz Group and add
-                a quiz.
-              </Text>
-            )}
+        {!groups && (
+          <View style={styles.homeHeaderNoGroups}>
+            <Text style={styles.textStyle}>
+              Looks like you don't have any quizes available. Press the pen icon
+              at the bottom of this screen to go to Create Quiz screen and add a
+              quiz.
+            </Text>
           </View>
-        )} */}
+        )}
 
         <View style={styles.homeHeader}>
           {!quizActive && (
@@ -104,6 +103,7 @@ export default function Home({ navigation }) {
                     group={group}
                     key={index}
                     subjectName={group.subject_name}
+                    navigation={navigation}
                   />
                 );
               })}
@@ -125,6 +125,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 60,
+  },
+  homeHeaderNoGroups: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 200,
   },
   background: {
     flex: 1,

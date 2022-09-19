@@ -178,6 +178,7 @@ export default function Quiz({ navigation, subjectName, group }) {
             )}
             {disabled && (
               <TouchableOpacity
+                navigation={navigation}
                 onPress={() => navigation.navigate({ name: 'Results' })}
               >
                 <HorizontalButton label={'View Results'} bgColor={'#3f2b96'} />
@@ -196,8 +197,8 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
-    width: '100%',
-    height: '100%',
+    // width: '100%',
+    // height: '100%',
   },
   header: {
     display: 'flex',
