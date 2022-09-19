@@ -2,6 +2,8 @@ import { StyleSheet, Text, View, Pressable } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import AnswerButton from './AnswerButton';
 import HorizontalButton from './HorizontalButton';
+import Results from './Results';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 export default function Quiz({ subjectName, group }) {
   const [options, setOptions] = useState([]);
@@ -55,8 +57,10 @@ export default function Quiz({ subjectName, group }) {
   };
 
   useEffect(() => {
-    runQuiz(post_q_a[index]);
-  }, []);
+    if (!disabled) {
+      runQuiz(post_q_a[index]);
+    }
+  }, [disabled]);
 
   const handleAnswer = (answer) => {
     if (index === post_q_a.length) {
@@ -104,7 +108,7 @@ export default function Quiz({ subjectName, group }) {
   //   console.log('options', options);
   //   console.log('score', score);
   //   console.log('index:', index);
-  //   console.log('results', results);
+  console.log('results', results);
 
   return (
     <View style={styles.quizContainer}>
@@ -113,50 +117,71 @@ export default function Quiz({ subjectName, group }) {
       </View>
 
       <View style={styles.questionSection}>
-        {options.map((option) => {
-          return <Text style={styles.questionText}>{option.question}?</Text>;
-        })}
+        {!disabled &&
+          !showResults &&
+          options.map((option) => {
+            return <Text style={styles.questionText}>{option.question}?</Text>;
+          })}
       </View>
 
       <View style={styles.answerSection}>
         <View style={styles.buttonContainer}>
-          {options.map((option, index) => {
-            return (
-              <View>
-                <AnswerButton
-                  answer={option.answerOptions[0]}
-                  onPress={() => handleAnswer(option.answerOptions[0])}
-                  disable={disabled}
-                />
-                <AnswerButton
-                  answer={option.answerOptions[1]}
-                  onPress={() => handleAnswer(option.answerOptions[1])}
-                  disable={disabled}
-                />
-                <AnswerButton
-                  answer={option.answerOptions[2]}
-                  onPress={() => handleAnswer(option.answerOptions[2])}
-                  disable={disabled}
-                />
-                <AnswerButton
-                  answer={option.answerOptions[3]}
-                  onPress={() => handleAnswer(option.answerOptions[3])}
-                  disable={disabled}
-                />
-              </View>
-            );
-          })}
+          {!disabled &&
+            !showResults &&
+            options.map((option, index) => {
+              return (
+                <View>
+                  <AnswerButton
+                    answer={option.answerOptions[0]}
+                    onPress={() => handleAnswer(option.answerOptions[0])}
+                    disable={disabled}
+                  />
+                  <AnswerButton
+                    answer={option.answerOptions[1]}
+                    onPress={() => handleAnswer(option.answerOptions[1])}
+                    disable={disabled}
+                  />
+                  <AnswerButton
+                    answer={option.answerOptions[2]}
+                    onPress={() => handleAnswer(option.answerOptions[2])}
+                    disable={disabled}
+                  />
+                  <AnswerButton
+                    answer={option.answerOptions[3]}
+                    onPress={() => handleAnswer(option.answerOptions[3])}
+                    disable={disabled}
+                  />
+                </View>
+              );
+            })}
 
           <Pressable onPress={null} style={styles.addTopMargin}>
             {!disabled && (
-              <HorizontalButton label={'End Quiz'} bgColor={'#FF416C'} />
+              <TouchableOpacity onPress={() => setShowResults(true)}>
+                <HorizontalButton label={'End Quiz'} bgColor={'#FF416C'} />
+              </TouchableOpacity>
             )}
             {disabled && (
-              <HorizontalButton label={'View Results'} bgColor={'#FF416C'} />
+              <TouchableOpacity onPress={() => setShowResults(true)}>
+                <HorizontalButton label={'View Results'} bgColor={'#3f2b96'} />
+              </TouchableOpacity>
             )}
           </Pressable>
         </View>
       </View>
+
+      {showResults &&
+        results &&
+        results.map((result) => {
+          return (
+            <Results
+              score={score}
+              question={result.askedQuestion}
+              selectedAnswer={result.selectedAnswer}
+              correctAnswer={result.correctAnswer}
+            />
+          );
+        })}
     </View>
   );
 }
@@ -167,6 +192,8 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
+    width: '100%',
+    height: '100%',
   },
   header: {
     display: 'flex',
