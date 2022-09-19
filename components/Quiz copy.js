@@ -3,23 +3,9 @@ import React, { useState, useEffect } from 'react';
 import AnswerButton from './AnswerButton';
 import HorizontalButton from './HorizontalButton';
 
-const shuffle = (array) => {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-};
-
 export default function Quiz({ group, subjectName }) {
   //   const [questions, setQuestions] = useState(null);
   //   const [answers, setAnswers] = useState(null);
-  const [options, setOptions] = useState([
-    {
-      question: '',
-      correct_answer: '',
-      incorrect_answers: [],
-    },
-  ]);
   const [showResults, setShowResults] = useState(false);
   const [index, setIndex] = useState(0);
   const { post_q_a } = group;
@@ -41,21 +27,6 @@ export default function Quiz({ group, subjectName }) {
   let totalQuizValue = questions.length;
   let currentQuestion = questionStack[index];
   let selectedAnswer;
-
-  const shuffle = (array) => {
-    for (let i = array.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [array[i], array[j]] = [array[j], array[i]];
-    }
-  };
-
-  const generateOptionsAndShuffle = (_question) => {
-    const options = [..._question.incorrect_answers];
-    options.push(_question.correct_answer);
-    shuffle(options);
-
-    return options;
-  };
 
   const runQuiz = () => {
     console.log('RUNNING QUIZ');

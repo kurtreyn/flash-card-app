@@ -18,6 +18,7 @@ export default function AddQuizGroup({ navigation }) {
   const [answer, setAnswer] = useState('');
   const [number, setNumber] = useState(0);
   const [groupSet, setGroupSet] = useState([]);
+  const [previousQuestions, setPreviousQuestions] = useState([]);
   // let questionAnswerArr = [];
 
   const handleGroupNameStatus = () => {
@@ -36,17 +37,29 @@ export default function AddQuizGroup({ navigation }) {
     if (groupSet === null) {
       setGroupSet([
         {
-          [question]: answer,
+          question: question,
+          correct_answer: answer,
+          incorrect_answers: [],
         },
       ]);
     } else {
       setGroupSet((prevState) => {
-        return [...prevState, { [question]: answer }];
+        return [
+          ...prevState,
+          { question: question, correct_answer: answer, incorrect_answers: [] },
+        ];
       });
     }
+    if (previousQuestions.length === 0) {
+      setPreviousQuestions(question);
+    } else {
+      setPreviousQuestions((prevState) => [prevState, question]);
+    }
+
     setQuestion('');
     setAnswer('');
     setNumber(number + 1);
+    setPreviousQuestions(previousQuestions.flat());
   };
 
   const uploadPostToFirebase = (posts) => {
@@ -71,7 +84,8 @@ export default function AddQuizGroup({ navigation }) {
     const newGroup = Object.assign({}, ...groupSet);
     let groupArr = [];
     groupArr.push(newGroup);
-    uploadPostToFirebase(groupArr);
+    console.log(groupArr);
+    // uploadPostToFirebase(groupArr);
   };
 
   const getUserName = () => {
@@ -96,6 +110,9 @@ export default function AddQuizGroup({ navigation }) {
   }, []);
 
   // console.log('currentLoggedInUser', currentLoggedInUser);
+  console.log('previousQuestions', previousQuestions);
+
+  console.log('GROUPSET', groupSet);
 
   return (
     <View style={styles.addQuizGroupContainer}>
