@@ -27,29 +27,13 @@ export default function Results({ navigation }) {
     quiz_reset,
   } = useSelector((state) => state.Reducer);
 
-  // const runUnsubscribe = () => {
-  //   dispatch(setQuizReset(false));
-  //   const unsubscribe = db
-  //     .collectionGroup('posts')
-  //     // .orderBy('timestamp', 'desc')
-  //     .onSnapshot((snapshot) => {
-  //       dispatch(
-  //         setGroups(
-  //           snapshot.docs.map((post) => ({ id: post.id, ...post.data() }))
-  //         )
-  //       );
-  //     });
-
-  //   return unsubscribe;
-  // };
-
   const resetQuiz = () => {
     dispatch(setActiveGroup(null));
     dispatch(setFinalResults(null));
     dispatch(setFinalScore(null));
     dispatch(setQuizReset(true));
-    // runUnsubscribe();
-    // navigation.navigate({ name: 'Home' });
+
+    navigation.navigate({ name: 'Home' });
   };
 
   // console.log('final_results', final_results);

@@ -57,6 +57,8 @@ export default function Home({ navigation }) {
   }, [groupLength]);
 
   useEffect(() => {
+    console.log('running useEffect');
+    setQuizActive(false);
     runUnsubscribe();
   }, [quiz_reset]);
 
