@@ -15,8 +15,6 @@ import {
 
 import { LinearGradient } from 'expo-linear-gradient';
 import { firebase, db } from '../firebase';
-// import { useSelector, useDispatch } from 'react-redux';
-// import { setCurrentUser, setToken } from '../redux/actions';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import Validator from 'email-validator';
@@ -28,10 +26,6 @@ const quizzieLogo = Image.resolveAssetSource(appLogo).uri;
 const profileAvatar = Image.resolveAssetSource(BLANK_PROFILE_PIC).uri;
 
 export default function Signup({ navigation }) {
-  // const dispatch = useDispatch();
-  // const { current_user, token } = useSelector((state) => state.Reducer);
-  // const [userInfo, setUserInfo] = useState(null);
-
   const signupFormSchema = Yup.object().shape({
     email: Yup.string().email().required('An email is required'),
     username: Yup.string().required().min(2, 'A username is required'),
@@ -193,13 +187,6 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     alignItems: 'center',
-    // backgroundColor: '#fff',
-    // marginTop: '15%',
-    // marginBottom: '10%',
-    // borderStyle: 'solid',
-    // borderWidth: '2px',
-    // borderColor: 'blue',
-    // borderRadius: '10px',
   },
   loginHeader: {
     alignItems: 'center',
@@ -215,10 +202,6 @@ const styles = StyleSheet.create({
   logoContainer: {
     alignItems: 'center',
     marginTop: 100,
-    // borderStyle: 'solid',
-    // borderWidth: '2px',
-    // borderColor: 'blue',
-    // borderRadius: '10px',
   },
   buttonWrapper: {
     display: 'flex',
@@ -243,7 +226,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   button: (isValid) => ({
-    backgroundColor: isValid ? '#40E0D0' : '#FF0080',
+    backgroundColor: isValid ? '#1CB5E0' : '#FF0080',
     alignItems: 'center',
     justifyContent: 'center',
     minHeight: 42,

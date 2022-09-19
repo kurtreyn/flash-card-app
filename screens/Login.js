@@ -206,13 +206,6 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     alignItems: 'center',
-    // backgroundColor: '#fff',
-    // marginTop: '15%',
-    // marginBottom: '10%',
-    // borderStyle: 'solid',
-    // borderWidth: '2px',
-    // borderColor: 'blue',
-    // borderRadius: '10px',
   },
   loginHeader: {
     alignItems: 'center',
@@ -228,10 +221,6 @@ const styles = StyleSheet.create({
   logoContainer: {
     alignItems: 'center',
     marginTop: 100,
-    // borderStyle: 'solid',
-    // borderWidth: '2px',
-    // borderColor: 'blue',
-    // borderRadius: '10px',
   },
   buttonWrapper: {
     display: 'flex',
@@ -256,7 +245,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   button: (isValid) => ({
-    backgroundColor: isValid ? '#40E0D0' : '#FF0080',
+    backgroundColor: isValid ? '#1CB5E0' : '#FF0080',
     alignItems: 'center',
     justifyContent: 'center',
     minHeight: 42,

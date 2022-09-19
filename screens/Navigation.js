@@ -7,7 +7,6 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import 'react-native-gesture-handler';
 import Login from './Login';
 import Home from './Home';
-import Profile from './Profile';
 import AddQuizGroup from './AddQuizGroup';
 import Signup from './Signup';
 import Results from './Results';
@@ -23,7 +22,6 @@ export const SignedInStack = ({ navigation }) => {
     <NavigationContainer style={styles.container}>
       <Tab.Navigator
         initialRouteName={current_user ? 'Home' : 'Login'}
-        // initialRouteName={'Login'}
         screenOptions={screenOptions}
       >
         <Tab.Screen
@@ -96,20 +94,6 @@ export const SignedInStack = ({ navigation }) => {
             tabBarIcon: ({ color }) => (
               <MaterialCommunityIcons
                 name="equalizer"
-                color={color}
-                size={26}
-              />
-            ),
-          }}
-        />
-        <Tab.Screen
-          name="Profile"
-          component={Profile}
-          options={{
-            tabBarLabel: 'Profile',
-            tabBarIcon: ({ color }) => (
-              <MaterialCommunityIcons
-                name="account-circle"
                 color={color}
                 size={26}
               />

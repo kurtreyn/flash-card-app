@@ -5,6 +5,7 @@ import {
   View,
   ScrollView,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { setGroups, setActiveGroup, setQuizReset } from '../redux/actions';
@@ -67,6 +68,25 @@ export default function Home({ navigation }) {
     return unsubscribe;
   };
 
+  const handleDeleteQuiz = (postId) => {
+    let message = '';
+    Alert.alert(
+      'This action cannot be undone',
+      message + '\n\n What would you like to do?',
+      [
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Cancel'),
+          style: 'cancel',
+        },
+        {
+          text: 'Delete',
+          onPress: () => deleteGroup(postId),
+        },
+      ]
+    );
+  };
+
   useEffect(() => {
     setQuizActive(false);
     runUnsubscribe();
@@ -96,7 +116,7 @@ export default function Home({ navigation }) {
 
         <View style={styles.homeHeader}>
           {!quizActive && (
-            <Text style={styles.textStyle}>
+            <Text style={[styles.textStyle, { marginTop: 40 }]}>
               Select the quiz you would like to take
             </Text>
           )}
@@ -111,7 +131,7 @@ export default function Home({ navigation }) {
                     <TouchableOpacity
                       id={group.id}
                       onPress={() => handleQuizStatus(group.id)}
-                      onLongPress={() => deleteGroup(group.id)}
+                      onLongPress={() => handleDeleteQuiz(group.id)}
                       key={index}
                     >
                       <GroupContainer
