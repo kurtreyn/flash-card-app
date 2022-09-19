@@ -57,7 +57,7 @@ export default function Home({ navigation }) {
   }, [groupLength]);
 
   useEffect(() => {
-    console.log('running useEffect');
+    // console.log('running useEffect');
     setQuizActive(false);
     runUnsubscribe();
   }, [quiz_reset]);
@@ -65,7 +65,7 @@ export default function Home({ navigation }) {
   // console.log('current_user', current_user);
   // console.log('GROUPS', groups);
   // console.log('active_group', active_group);
-  console.log('quiz_reset', quiz_reset);
+  // console.log('quiz_reset', quiz_reset);
 
   return (
     <View style={styles.homeContainer}>

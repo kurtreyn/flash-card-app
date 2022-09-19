@@ -9,16 +9,14 @@ import ControlPanel from '../components/ControlPanel';
 
 export default function AddQuizGroup({ navigation }) {
   const dispatch = useDispatch();
-  const { groups, has_group_name, group_name } = useSelector(
-    (state) => state.Reducer
-  );
+  const { has_group_name, group_name } = useSelector((state) => state.Reducer);
   const [currentLoggedInUser, setCurrentLoggedInUser] = useState(null);
   const [nameOfGroup, setNameOfGroup] = useState('');
   const [question, setQuestion] = useState('');
   const [answer, setAnswer] = useState('');
   const [number, setNumber] = useState(0);
   const [groupSet, setGroupSet] = useState([]);
-  const [previousQuestions, setPreviousQuestions] = useState([]);
+  // const [previousQuestions, setPreviousQuestions] = useState([]);
   // let questionAnswerArr = [];
 
   const handleGroupNameStatus = () => {
