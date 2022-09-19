@@ -16,7 +16,7 @@ import Quiz from '../components/Quiz';
 import AnswerButton from '../components/AnswerButton';
 
 export default function Home({ navigation }) {
-  const [quizActive, setQuizActive] = useState(false);
+  const [quizActive, setQuizActive] = useState(true);
   const [subjectName, setSubjectName] = useState('');
   const { groups, current_user } = useSelector((state) => state.Reducer);
   let groupLength;
@@ -48,7 +48,7 @@ export default function Home({ navigation }) {
   }, [groupLength]);
 
   // console.log('current_user', current_user);
-  console.log('GROUPS', groups);
+  // console.log('GROUPS', groups);
 
   return (
     <View style={styles.homeContainer}>
@@ -86,6 +86,7 @@ export default function Home({ navigation }) {
                       label={group.subject_name}
                       key={index}
                       id={group.id}
+                      group={group}
                       handleQuizStatus={handleQuizStatus}
                     />
                   );

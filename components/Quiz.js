@@ -3,44 +3,15 @@ import React, { useState, useEffect } from 'react';
 import AnswerButton from './AnswerButton';
 import HorizontalButton from './HorizontalButton';
 
-const shuffle = (array) => {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-};
-
-export default function Quiz({ group, subjectName }) {
+export default function Quiz({ subjectName, group }) {
   //   const [questions, setQuestions] = useState(null);
   //   const [answers, setAnswers] = useState(null);
-  const [options, setOptions] = useState([
-    {
-      question: '',
-      correct_answer: '',
-      incorrect_answers: [],
-    },
-  ]);
+  const [options, setOptions] = useState([]);
   const [showResults, setShowResults] = useState(false);
   const [index, setIndex] = useState(0);
   const { post_q_a } = group;
-  const questions = [];
-  const answers = [];
-  const quizKey = post_q_a.map((obj) => obj);
-  post_q_a.map((obj) => {
-    let keys = Object.keys(obj);
-    keys.forEach((key) => {
-      let values = obj[key];
-      questions.push(key);
-      answers.push(values);
-    });
-  });
-
-  let answerStack = answers.slice(0, 4);
-  let questionStack = questions.slice(0, 4);
-  let selectedAnswers = [];
-  let totalQuizValue = questions.length;
-  let currentQuestion = questionStack[index];
-  let selectedAnswer;
+  let answers = post_q_a.map((answer) => answer.correct_answer);
+  let questions = post_q_a.map((question) => question.question);
 
   const shuffle = (array) => {
     for (let i = array.length - 1; i > 0; i--) {
@@ -57,25 +28,44 @@ export default function Quiz({ group, subjectName }) {
     return options;
   };
 
-  const runQuiz = () => {
+  const runQuiz = (currentObj) => {
     console.log('RUNNING QUIZ');
+    // let wrongAnswers = answers.filter((answer) => {
+    //   if (answer != currentObj.correct_answer) {
+    //     for (let i = 0; i <= 3; i++) {
+    //       return answers[i];
+    //     }
+    //   }
+    // });
+    let wrongAnswers = [];
+    for (let i = 0; i <= answers.length; i++) {
+      if (answers[i] != currentObj.correct_answer) {
+        if (i > 3) {
+          break;
+        }
+        wrongAnswers.push(answers[i]);
+      }
+    }
+
+    console.log('wrongAnswers', wrongAnswers);
+    console.log(currentObj.correct_answer);
+    let opt;
   };
 
   useEffect(() => {
-    runQuiz();
+    runQuiz(post_q_a[0]);
   }, []);
 
   const handleAnswer = (e) => {
     console.log(e.target.value);
   };
 
-  //   console.log('GROUP:', group);
+  //   console.log('group', group);
   //   console.log('subjectName', subjectName);
+  // console.log('post_q_a', post_q_a);
   //   console.log('questions', questions);
-  // console.log('answers', answers);
-  //   console.log('quizKey', quizKey);
-  //   console.log('answerStack', answerStack);
-  //   console.log('questionStack', questionStack);
+  //   console.log('answers', answers);
+  console.log('options', options);
 
   return (
     <View style={styles.quizContainer}>
@@ -84,7 +74,7 @@ export default function Quiz({ group, subjectName }) {
       </View>
 
       <View style={styles.questionSection}>
-        <Text style={styles.questionText}>{currentQuestion}?</Text>
+        <Text style={styles.questionText}>{subjectName}?</Text>
       </View>
 
       <View style={styles.answerSection}>

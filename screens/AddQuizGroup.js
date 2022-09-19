@@ -50,16 +50,17 @@ export default function AddQuizGroup({ navigation }) {
         ];
       });
     }
-    if (previousQuestions.length === 0) {
-      setPreviousQuestions(question);
-    } else {
-      setPreviousQuestions((prevState) => [prevState, question]);
-    }
+    // if (previousQuestions.length === 0) {
+    //   setPreviousQuestions([question]);
+    // } else {
+    //   setPreviousQuestions((prevState) => {
+    //     return [...prevState, question];
+    //   });
+    // }
 
     setQuestion('');
     setAnswer('');
     setNumber(number + 1);
-    setPreviousQuestions(previousQuestions.flat());
   };
 
   const uploadPostToFirebase = (posts) => {
@@ -81,11 +82,7 @@ export default function AddQuizGroup({ navigation }) {
   };
 
   const handleSubmitGroup = () => {
-    const newGroup = Object.assign({}, ...groupSet);
-    let groupArr = [];
-    groupArr.push(newGroup);
-    console.log(groupArr);
-    // uploadPostToFirebase(groupArr);
+    uploadPostToFirebase(groupSet);
   };
 
   const getUserName = () => {
@@ -110,9 +107,8 @@ export default function AddQuizGroup({ navigation }) {
   }, []);
 
   // console.log('currentLoggedInUser', currentLoggedInUser);
-  console.log('previousQuestions', previousQuestions);
-
-  console.log('GROUPSET', groupSet);
+  // console.log('previousQuestions', previousQuestions);
+  // console.log('GROUPSET', groupSet);
 
   return (
     <View style={styles.addQuizGroupContainer}>
