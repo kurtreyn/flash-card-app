@@ -13,9 +13,9 @@ export default function Results({ navigation }) {
         <View style={styles.finalScoreContainer}>
           <Text style={styles.finalScore}>Final Score: {final_score}</Text>
         </View>
-        {final_results.map((result) => {
+        {final_results.map((result, index) => {
           return (
-            <View style={styles.displaySection}>
+            <View style={styles.displaySection} key={index}>
               <Text style={styles.questionText}>{result.askedQuestion}?</Text>
               <Text style={styles.answerText}>{result.correctAnswer}</Text>
               <Text style={styles.answerText}>{result.selectedAnswer}</Text>

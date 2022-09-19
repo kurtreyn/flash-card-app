@@ -23,6 +23,7 @@ export const SignedInStack = ({ navigation }) => {
     <NavigationContainer style={styles.container}>
       <Tab.Navigator
         initialRouteName={current_user ? 'Home' : 'Login'}
+        // initialRouteName={'Login'}
         screenOptions={screenOptions}
       >
         <Tab.Screen
