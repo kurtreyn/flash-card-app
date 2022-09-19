@@ -4,37 +4,39 @@ import {
   StyleSheet,
   View,
   ScrollView,
-  Pressable,
   TouchableOpacity,
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
-import { setGroups } from '../redux/actions';
+import { setGroups, setActiveGroup, setQuizReset } from '../redux/actions';
 import { LinearGradient } from 'expo-linear-gradient';
-import { firebase, db } from '../firebase';
+import { db } from '../firebase';
 import GroupContainer from '../components/GroupContainer';
 import Quiz from '../components/Quiz';
-import AnswerButton from '../components/AnswerButton';
 
 export default function Home({ navigation }) {
-  const [quizActive, setQuizActive] = useState(true);
-  const [subjectName, setSubjectName] = useState('');
-  const { groups, current_user } = useSelector((state) => state.Reducer);
-
+  const [quizActive, setQuizActive] = useState(false);
+  const { groups, active_group, quiz_reset } = useSelector(
+    (state) => state.Reducer
+  );
   let groupLength;
 
   if (groups) {
     groupLength = groups.length;
-    // const { subject_name } = groups;
-    // console.log(subject_name);
   }
   const dispatch = useDispatch();
 
-  const handleQuizStatus = () => {
-    console.log('running function');
+  const handleQuizStatus = (theId) => {
+    let chosenGroup = groups.filter((group) => {
+      if (group.id === theId) {
+        return group;
+      }
+    });
     setQuizActive(!quizActive);
+    dispatch(setActiveGroup(chosenGroup));
   };
 
-  useEffect(() => {
+  const runUnsubscribe = () => {
+    dispatch(setQuizReset(false));
     const unsubscribe = db
       .collectionGroup('posts')
       // .orderBy('timestamp', 'desc')
@@ -45,11 +47,23 @@ export default function Home({ navigation }) {
           )
         );
       });
+
     return unsubscribe;
+  };
+
+  useEffect(() => {
+    runUnsubscribe();
+    dispatch(setQuizReset(false));
   }, [groupLength]);
+
+  useEffect(() => {
+    runUnsubscribe();
+  }, [quiz_reset]);
 
   // console.log('current_user', current_user);
   // console.log('GROUPS', groups);
+  // console.log('active_group', active_group);
+  console.log('quiz_reset', quiz_reset);
 
   return (
     <View style={styles.homeContainer}>
@@ -81,13 +95,19 @@ export default function Home({ navigation }) {
               {groups &&
                 groups.map((group, index) => {
                   return (
-                    <GroupContainer
-                      label={group.subject_name}
-                      key={index}
+                    <TouchableOpacity
                       id={group.id}
-                      group={group}
-                      handleQuizStatus={handleQuizStatus}
-                    />
+                      onPress={() => handleQuizStatus(group.id)}
+                      key={index}
+                    >
+                      <GroupContainer
+                        label={group.subject_name}
+                        key={index}
+                        id={group.id}
+                        group={group}
+                        handleQuizStatus={handleQuizStatus}
+                      />
+                    </TouchableOpacity>
                   );
                 })}
             </View>
@@ -96,8 +116,8 @@ export default function Home({ navigation }) {
 
         {quizActive && (
           <View style={styles.innerContainer}>
-            {groups &&
-              groups.map((group, index) => {
+            {active_group &&
+              active_group.map((group, index) => {
                 return (
                   <Quiz
                     group={group}

@@ -10,6 +10,7 @@ import {
   SET_FINAL_SCORE,
   SET_ACTIVE_GROUP,
   SET_POINTS_POSSIBLE,
+  SET_QUIZ_RESET,
 } from './actions';
 
 const initialState = {
@@ -23,6 +24,7 @@ const initialState = {
   final_score: null,
   points_possible: null,
   active_group: null,
+  quiz_reset: false,
 };
 
 const Reducer = (state = initialState, action) => {
@@ -39,8 +41,8 @@ const Reducer = (state = initialState, action) => {
       return { ...state, current_user: action.payload };
     case SET_TOKEN:
       return { ...state, token: action.payload };
-    case SET_LOADING:
-      return { ...state, loading: action.payload };
+    case SET_QUIZ_RESET:
+      return { ...state, quiz_reset: action.payload };
     case SET_FINAL_RESULTS:
       return { ...state, final_results: action.payload };
     case SET_FINAL_SCORE:

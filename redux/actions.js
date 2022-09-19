@@ -8,6 +8,7 @@ export const SET_FINAL_RESULTS = 'SET_FINAL_RESULTS ';
 export const SET_FINAL_SCORE = 'SET_FINAL_SCORE ';
 export const SET_ACTIVE_GROUP = 'SET_ACTIVE_GROUP,';
 export const SET_POINTS_POSSIBLE = 'SET_POINTS_POSSIBLE';
+export const SET_QUIZ_RESET = 'SET_QUIZ_RESET';
 
 export const setCurrentUser = (user) => (dispatch) => {
   dispatch({
@@ -72,9 +73,9 @@ export const setPointsPossible = (points) => (dispatch) => {
   });
 };
 
-export const setLoading = (load) => (dispatch) => {
+export const setQuizReset = (quiz) => (dispatch) => {
   dispatch({
-    type: SET_LOADING,
-    payload: loading,
+    type: SET_QUIZ_RESET,
+    payload: quiz,
   });
 };

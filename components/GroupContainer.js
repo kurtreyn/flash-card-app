@@ -9,17 +9,13 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
-export default function GroupContainer({ label, handleQuizStatus, id }) {
+export default function GroupContainer({ label, id }) {
   return (
-    <Pressable onPress={handleQuizStatus}>
-      <TouchableHighlight underlayColor="#f7797d">
-        <View style={styles.groupContainer}>
-          <View style={styles.innerContainer}>
-            <Text style={styles.textStyle}> {label} Quiz </Text>
-          </View>
-        </View>
-      </TouchableHighlight>
-    </Pressable>
+    <View style={styles.groupContainer} id={id}>
+      <View style={styles.innerContainer}>
+        <Text style={styles.textStyle}> {label}</Text>
+      </View>
+    </View>
   );
 }
 

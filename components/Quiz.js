@@ -156,26 +156,36 @@ export default function Quiz({ navigation, subjectName, group }) {
           {options.map((option, index) => {
             return (
               <View>
-                <AnswerButton
-                  answer={option.answerOptions[0]}
-                  onPress={() => handleAnswer(option.answerOptions[0])}
-                  disable={disabled}
-                />
-                <AnswerButton
-                  answer={option.answerOptions[1]}
-                  onPress={() => handleAnswer(option.answerOptions[1])}
-                  disable={disabled}
-                />
-                <AnswerButton
-                  answer={option.answerOptions[2]}
-                  onPress={() => handleAnswer(option.answerOptions[2])}
-                  disable={disabled}
-                />
-                <AnswerButton
-                  answer={option.answerOptions[3]}
-                  onPress={() => handleAnswer(option.answerOptions[3])}
-                  disable={disabled}
-                />
+                {option.answerOptions[0] && (
+                  <AnswerButton
+                    answer={option.answerOptions[0]}
+                    onPress={() => handleAnswer(option.answerOptions[0])}
+                    disable={disabled}
+                  />
+                )}
+                {option.answerOptions[1] && (
+                  <AnswerButton
+                    answer={option.answerOptions[1]}
+                    onPress={() => handleAnswer(option.answerOptions[1])}
+                    disable={disabled}
+                  />
+                )}
+
+                {option.answerOptions[2] && (
+                  <AnswerButton
+                    answer={option.answerOptions[2]}
+                    onPress={() => handleAnswer(option.answerOptions[2])}
+                    disable={disabled}
+                  />
+                )}
+
+                {option.answerOptions[3] && (
+                  <AnswerButton
+                    answer={option.answerOptions[3]}
+                    onPress={() => handleAnswer(option.answerOptions[3])}
+                    disable={disabled}
+                  />
+                )}
               </View>
             );
           })}
