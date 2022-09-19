@@ -35,7 +35,7 @@ export default function Quiz({ subjectName, group }) {
     let answerOptions = [];
     let idx = wrongAnswers.indexOf(correct_answer);
 
-    console.log('wrongAnswers was', wrongAnswers);
+    // console.log('wrongAnswers was', wrongAnswers);
 
     if (idx > -1) {
       wrongAnswers.splice(idx, 1);
@@ -49,7 +49,7 @@ export default function Quiz({ subjectName, group }) {
     // console.log(answerOptions);
     // wrongAnswers.forEach((answer) => answerOptions.push(answer));
     answerOptions.push(correct_answer);
-    console.log(answerOptions);
+    // console.log(answerOptions);
 
     let qSet = {
       question: question,
@@ -111,7 +111,12 @@ export default function Quiz({ subjectName, group }) {
   //   console.log('options', options);
   //   console.log('score', score);
   //   console.log('index:', index);
-  //   console.log('results', results);
+  console.log('results', results);
+
+  const handleShowResults = () => {
+    console.log('showing results');
+    setShowResults(true);
+  };
 
   return (
     <View style={styles.quizContainer}>
@@ -158,18 +163,18 @@ export default function Quiz({ subjectName, group }) {
               );
             })}
 
-          <Pressable onPress={null} style={styles.addTopMargin}>
+          <View style={styles.addTopMargin}>
             {!disabled && (
-              <TouchableOpacity onPress={() => setShowResults(true)}>
+              <Pressable onPress={() => setShowResults(true)}>
                 <HorizontalButton label={'End Quiz'} bgColor={'#FF416C'} />
-              </TouchableOpacity>
+              </Pressable>
             )}
             {disabled && (
-              <TouchableOpacity onPress={() => setShowResults(true)}>
+              <Pressable onPress={handleShowResults}>
                 <HorizontalButton label={'View Results'} bgColor={'#3f2b96'} />
-              </TouchableOpacity>
+              </Pressable>
             )}
-          </Pressable>
+          </View>
         </View>
       </View>
 
