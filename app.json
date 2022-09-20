@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "quizzie",
-    "slug": "quizzie",
+    "name": "flash-card-app",
+    "slug": "flash-card-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
