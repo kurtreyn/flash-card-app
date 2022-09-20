@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Text,
   StyleSheet,
@@ -9,8 +9,11 @@ import {
   TextInput,
   Image,
   KeyboardAvoidingView,
+  Keyboard,
   Platform,
   TouchableWithoutFeedback,
+  ScrollView,
+  Dimensions,
 } from 'react-native';
 
 import { LinearGradient } from 'expo-linear-gradient';
@@ -21,7 +24,7 @@ import Validator from 'email-validator';
 
 import appLogo from '../assets/quizzie-logo.png';
 import BLANK_PROFILE_PIC from '../assets/profile-avatar.png';
-
+const screenWidth = Dimensions.get('window').width;
 const quizzieLogo = Image.resolveAssetSource(appLogo).uri;
 const profileAvatar = Image.resolveAssetSource(BLANK_PROFILE_PIC).uri;
 
@@ -61,128 +64,136 @@ export default function Signup({ navigation }) {
       style={styles.loginContainer}
     >
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-        <LinearGradient
-          colors={['#2980B9', '#6DD5FA', '#FFFFFF']}
-          style={styles.background}
-        >
-          <View style={styles.logoContainer}>
-            <Image source={{ uri: quizzieLogo, height: 150, width: 200 }} />
-          </View>
-          <View style={styles.wrapper}>
-            <Formik
-              initialValues={{ email: '', username: '', password: '' }}
-              onSubmit={(values) => {
-                onSignup(values.email, values.username, values.password);
-              }}
-              validationSchema={signupFormSchema}
-              validateOnMount={true}
-            >
-              {({
-                handleChange,
-                handleBlur,
-                handleSubmit,
-                values,
-                isValid,
-              }) => (
-                <>
-                  <View
-                    style={[
-                      styles.inputField,
-                      {
-                        borderColor:
-                          values.email.length < 1 ||
-                          Validator.validate(values.email)
-                            ? '#ccc'
-                            : 'red',
-                      },
-                    ]}
-                  >
-                    <TextInput
-                      placeholder="Email"
-                      placeholderTextColor="#444"
-                      autoCapitalize="none"
-                      keyboardType="email-address"
-                      textContentType="emailAddress"
-                      autoFocus={true}
-                      onChangeText={handleChange('email')}
-                      onBlur={handleBlur('email')}
-                      value={values.email}
-                    />
-                  </View>
-                  <View
-                    style={[
-                      styles.inputField,
-                      {
-                        borderColor:
-                          values.email.length < 1 ||
-                          Validator.validate(values.email)
-                            ? '#ccc'
-                            : 'red',
-                      },
-                    ]}
-                  >
-                    <TextInput
-                      placeholder="Username"
-                      placeholderTextColor="#444"
-                      autoCapitalize="none"
-                      textContentType="username"
-                      autoFocus={true}
-                      onChangeText={handleChange('username')}
-                      onBlur={handleBlur('username')}
-                      value={values.username}
-                    />
-                  </View>
-                  <View
-                    style={[
-                      styles.inputField,
-                      {
-                        borderColor:
-                          1 > values.password.length ||
-                          values.password.length > 6
-                            ? '#CCC'
-                            : 'red',
-                      },
-                    ]}
-                  >
-                    <TextInput
-                      placeholder="Password"
-                      placeholderTextColor="#444"
-                      autoCapitalize="none"
-                      autoCorrect={false}
-                      secureTextEntry={true}
-                      textContentType="password"
-                      onChangeText={handleChange('password')}
-                      onBlur={handleBlur('password')}
-                      value={values.password}
-                    />
-                  </View>
-                  <View style={{ alignItems: 'flex-end', marginBottom: 30 }}>
-                    <Text style={{ color: '#3c1053' }}>Forgot password?</Text>
-                  </View>
-                  <Pressable
-                    titleSize={20}
-                    style={styles.button(isValid)}
-                    onPress={handleSubmit}
-                  >
-                    <Text style={styles.buttonText}>Sign Up</Text>
-                  </Pressable>
-                  <View style={styles.signupContainer}>
-                    <Text>Already have an account?</Text>
-                    <TouchableOpacity onPress={() => navigation.goBack()}>
-                      <Text style={{ color: '#3c1053' }}> Log In</Text>
-                    </TouchableOpacity>
-                  </View>
-                </>
-              )}
-            </Formik>
-          </View>
-        </LinearGradient>
+        <ScrollView contentContainerStyle={styles.scrollContainer}>
+          <LinearGradient
+            colors={['#2980B9', '#6DD5FA', '#FFFFFF']}
+            style={styles.background}
+          >
+            <View style={styles.logoContainer}>
+              <Image source={{ uri: quizzieLogo, height: 150, width: 200 }} />
+            </View>
+            <View style={styles.wrapper}>
+              <Formik
+                initialValues={{ email: '', username: '', password: '' }}
+                onSubmit={(values) => {
+                  onSignup(values.email, values.username, values.password);
+                }}
+                validationSchema={signupFormSchema}
+                validateOnMount={true}
+              >
+                {({
+                  handleChange,
+                  handleBlur,
+                  handleSubmit,
+                  values,
+                  isValid,
+                }) => (
+                  <>
+                    <View
+                      style={[
+                        styles.inputField,
+                        {
+                          borderColor:
+                            values.email.length < 1 ||
+                            Validator.validate(values.email)
+                              ? '#ccc'
+                              : 'red',
+                        },
+                      ]}
+                    >
+                      <TextInput
+                        placeholder="Email"
+                        placeholderTextColor="#444"
+                        autoCapitalize="none"
+                        keyboardType="email-address"
+                        textContentType="emailAddress"
+                        autoFocus={true}
+                        onChangeText={handleChange('email')}
+                        onBlur={handleBlur('email')}
+                        value={values.email}
+                      />
+                    </View>
+                    <View
+                      style={[
+                        styles.inputField,
+                        {
+                          borderColor:
+                            values.email.length < 1 ||
+                            Validator.validate(values.email)
+                              ? '#ccc'
+                              : 'red',
+                        },
+                      ]}
+                    >
+                      <TextInput
+                        placeholder="Username"
+                        placeholderTextColor="#444"
+                        autoCapitalize="none"
+                        textContentType="username"
+                        autoFocus={true}
+                        onChangeText={handleChange('username')}
+                        onBlur={handleBlur('username')}
+                        value={values.username}
+                      />
+                    </View>
+                    <View
+                      style={[
+                        styles.inputField,
+                        {
+                          borderColor:
+                            1 > values.password.length ||
+                            values.password.length > 6
+                              ? '#CCC'
+                              : 'red',
+                        },
+                      ]}
+                    >
+                      <TextInput
+                        placeholder="Password"
+                        placeholderTextColor="#444"
+                        autoCapitalize="none"
+                        autoCorrect={false}
+                        secureTextEntry={true}
+                        textContentType="password"
+                        onChangeText={handleChange('password')}
+                        onBlur={handleBlur('password')}
+                        value={values.password}
+                      />
+                    </View>
+                    <View style={{ alignItems: 'flex-end', marginBottom: 30 }}>
+                      <Text style={{ color: '#3c1053' }}>Forgot password?</Text>
+                    </View>
+                    <Pressable
+                      titleSize={20}
+                      style={styles.button(isValid)}
+                      onPress={handleSubmit}
+                    >
+                      <Text style={styles.buttonText}>Sign Up</Text>
+                    </Pressable>
+                    <View style={styles.signupContainer}>
+                      <Text>Already have an account?</Text>
+                      <TouchableOpacity onPress={() => navigation.goBack()}>
+                        <Text style={{ color: '#3c1053' }}> Log In</Text>
+                      </TouchableOpacity>
+                    </View>
+                  </>
+                )}
+              </Formik>
+            </View>
+          </LinearGradient>
+        </ScrollView>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
+  scrollContainer: {
+    flex: 1,
+    flexDirection: 'column',
+    alignItems: 'center',
+    width: screenWidth,
+  },
   loginContainer: {
     flex: 1,
     flexDirection: 'column',
@@ -216,7 +227,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   wrapper: {
-    marginTop: 200,
+    marginTop: 100,
   },
   inputField: {
     borderRadius: 4,
@@ -226,7 +237,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   button: (isValid) => ({
-    backgroundColor: isValid ? '#1CB5E0' : '#FF0080',
+    backgroundColor: isValid ? '#5D26C1' : '#FF0080',
     alignItems: 'center',
     justifyContent: 'center',
     minHeight: 42,

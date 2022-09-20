@@ -12,6 +12,7 @@ import {
   Keyboard,
   Platform,
   TouchableWithoutFeedback,
+  Dimensions,
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { setCurrentUser } from '../redux/actions';
@@ -22,6 +23,8 @@ import * as Yup from 'yup';
 import Validator from 'email-validator';
 
 import appLogo from '../assets/quizzie-logo.png';
+import { ScrollView } from 'react-native-gesture-handler';
+const screenWidth = Dimensions.get('window').width;
 const quizzieLogo = Image.resolveAssetSource(appLogo).uri;
 
 export default function Login({ navigation }) {
@@ -83,125 +86,137 @@ export default function Login({ navigation }) {
       style={styles.loginContainer}
     >
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-        <LinearGradient
-          colors={['#2980B9', '#6DD5FA', '#FFFFFF']}
-          style={styles.background}
-        >
-          <View style={styles.logoContainer}>
-            <Image source={{ uri: quizzieLogo, height: 150, width: 200 }} />
-          </View>
-          <View style={styles.wrapper}>
-            <Formik
-              initialValues={{ email: '', password: '' }}
-              onSubmit={(values) => {
-                onLogin(values.email, values.password);
-              }}
-              validationSchema={loginFormSchema}
-              validateOnMount={true}
-            >
-              {({
-                handleChange,
-                handleBlur,
-                handleSubmit,
-                values,
-                isValid,
-              }) => (
-                <>
-                  {!current_user && (
-                    <View
-                      style={[
-                        styles.inputField,
-                        {
-                          borderColor:
-                            values.email.length < 1 ||
-                            Validator.validate(values.email)
-                              ? '#fff'
-                              : 'red',
-                        },
-                      ]}
-                    >
-                      <TextInput
-                        placeholder="username or email"
-                        placeholderTextColor="#444"
-                        autoCapitalize="none"
-                        keyboardType="email-address"
-                        textContentType="emailAddress"
-                        autoFocus={true}
-                        onChangeText={handleChange('email')}
-                        onBlur={handleBlur('email')}
-                        value={values.email}
-                      />
-                    </View>
-                  )}
-                  {!current_user && (
-                    <View
-                      style={[
-                        styles.inputField,
-                        {
-                          borderColor:
-                            1 > values.password.length ||
-                            values.password.length > 6
-                              ? '#fff'
-                              : 'red',
-                        },
-                      ]}
-                    >
-                      <TextInput
-                        placeholder="Password"
-                        placeholderTextColor="#444"
-                        autoCapitalize="none"
-                        autoCorrect={false}
-                        secureTextEntry={true}
-                        textContentType="password"
-                        onChangeText={handleChange('password')}
-                        onBlur={handleBlur('password')}
-                        value={values.password}
-                      />
-                    </View>
-                  )}
+        <ScrollView contentContainerStyle={styles.scrollContainer}>
+          <LinearGradient
+            colors={['#2980B9', '#6DD5FA', '#FFFFFF']}
+            style={styles.background}
+          >
+            <View style={styles.logoContainer}>
+              <Image source={{ uri: quizzieLogo, height: 150, width: 200 }} />
+            </View>
+            <View style={styles.wrapper}>
+              <Formik
+                initialValues={{ email: '', password: '' }}
+                onSubmit={(values) => {
+                  onLogin(values.email, values.password);
+                }}
+                validationSchema={loginFormSchema}
+                validateOnMount={true}
+              >
+                {({
+                  handleChange,
+                  handleBlur,
+                  handleSubmit,
+                  values,
+                  isValid,
+                }) => (
+                  <>
+                    {!current_user && (
+                      <View
+                        style={[
+                          styles.inputField,
+                          {
+                            borderColor:
+                              values.email.length < 1 ||
+                              Validator.validate(values.email)
+                                ? '#fff'
+                                : 'red',
+                          },
+                        ]}
+                      >
+                        <TextInput
+                          placeholder="username or email"
+                          placeholderTextColor="#444"
+                          autoCapitalize="none"
+                          keyboardType="email-address"
+                          textContentType="emailAddress"
+                          autoFocus={true}
+                          onChangeText={handleChange('email')}
+                          onBlur={handleBlur('email')}
+                          value={values.email}
+                        />
+                      </View>
+                    )}
+                    {!current_user && (
+                      <View
+                        style={[
+                          styles.inputField,
+                          {
+                            borderColor:
+                              1 > values.password.length ||
+                              values.password.length > 6
+                                ? '#fff'
+                                : 'red',
+                          },
+                        ]}
+                      >
+                        <TextInput
+                          placeholder="Password"
+                          placeholderTextColor="#444"
+                          autoCapitalize="none"
+                          autoCorrect={false}
+                          secureTextEntry={true}
+                          textContentType="password"
+                          onChangeText={handleChange('password')}
+                          onBlur={handleBlur('password')}
+                          value={values.password}
+                        />
+                      </View>
+                    )}
 
-                  {!current_user && (
-                    <View style={{ alignItems: 'flex-end', marginBottom: 30 }}>
-                      <Text style={{ color: '#3c1053' }}>Forgot password?</Text>
+                    {!current_user && (
+                      <View
+                        style={{ alignItems: 'flex-end', marginBottom: 30 }}
+                      >
+                        <Text style={{ color: '#3c1053' }}>
+                          Forgot password?
+                        </Text>
+                      </View>
+                    )}
+                    {!current_user && (
+                      <Pressable
+                        titleSize={20}
+                        style={styles.button(isValid)}
+                        onPress={handleSubmit}
+                      >
+                        <Text style={styles.buttonText}>Log In</Text>
+                      </Pressable>
+                    )}
+                    {current_user && (
+                      <Pressable
+                        titleSize={20}
+                        style={styles.button(isValid)}
+                        onPress={onSignout}
+                      >
+                        <Text style={styles.buttonText}>Sign Out</Text>
+                      </Pressable>
+                    )}
+                    <View style={styles.signupContainer}>
+                      <Text>Don't have an account?</Text>
+                      <TouchableOpacity
+                        onPress={() => navigation.navigate({ name: 'Signup' })}
+                      >
+                        <Text style={{ color: '#3c1053' }}> Sign Up</Text>
+                      </TouchableOpacity>
                     </View>
-                  )}
-                  {!current_user && (
-                    <Pressable
-                      titleSize={20}
-                      style={styles.button(isValid)}
-                      onPress={handleSubmit}
-                    >
-                      <Text style={styles.buttonText}>Log In</Text>
-                    </Pressable>
-                  )}
-                  {current_user && (
-                    <Pressable
-                      titleSize={20}
-                      style={styles.button(isValid)}
-                      onPress={onSignout}
-                    >
-                      <Text style={styles.buttonText}>Sign Out</Text>
-                    </Pressable>
-                  )}
-                  <View style={styles.signupContainer}>
-                    <Text>Don't have an account?</Text>
-                    <TouchableOpacity
-                      onPress={() => navigation.navigate({ name: 'Signup' })}
-                    >
-                      <Text style={{ color: '#3c1053' }}> Sign Up</Text>
-                    </TouchableOpacity>
-                  </View>
-                </>
-              )}
-            </Formik>
-          </View>
-        </LinearGradient>
+                  </>
+                )}
+              </Formik>
+            </View>
+          </LinearGradient>
+        </ScrollView>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
+  scrollContainer: {
+    flex: 1,
+    flexDirection: 'column',
+    alignItems: 'center',
+    width: screenWidth,
+  },
   loginContainer: {
     flex: 1,
     flexDirection: 'column',
@@ -235,7 +250,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   wrapper: {
-    marginTop: 200,
+    marginTop: 100,
   },
   inputField: {
     borderRadius: 4,
@@ -245,7 +260,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   button: (isValid) => ({
-    backgroundColor: isValid ? '#1CB5E0' : '#FF0080',
+    backgroundColor: isValid ? '#5D26C1' : '#FF0080',
     alignItems: 'center',
     justifyContent: 'center',
     minHeight: 42,

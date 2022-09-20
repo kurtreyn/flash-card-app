@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "flash-card-app",
-    "slug": "flash-card-app",
+    "name": "quizzie",
+    "slug": "quizzie",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -15,9 +15,7 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.kurtreyn.quizzie"

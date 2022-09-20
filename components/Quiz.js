@@ -2,7 +2,7 @@ import {
   StyleSheet,
   Text,
   View,
-  Pressable,
+  // Pressable,
   TouchableOpacity,
 } from 'react-native';
 import React, { useState, useEffect } from 'react';

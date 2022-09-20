@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   StyleSheet,
   Text,
@@ -6,9 +6,10 @@ import {
   Keyboard,
   KeyboardAvoidingView,
   TextInput,
+  TouchableWithoutFeedback,
 } from 'react-native';
-import { useSelector, useDispatch } from 'react-redux';
-import { setPosts } from '../redux/actions';
+// import { useSelector, useDispatch } from 'react-redux';
+// import { setPosts } from '../redux/actions';
 
 export default function InputContainer({
   hasNameOfGroup,
@@ -20,66 +21,73 @@ export default function InputContainer({
   setNameOfGroup,
 }) {
   return (
-    <KeyboardAvoidingView style={styles.inputContainer}>
-      {!hasNameOfGroup && (
-        <View style={styles.instructionsWrapper}>
-          <Text style={styles.labelStyle}>Enter a Name for your Group</Text>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    >
+      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+        <View style={styles.inputContainer}>
+          {!hasNameOfGroup && (
+            <View style={styles.instructionsWrapper}>
+              <Text style={styles.labelStyle}>Enter a Name for your Quiz</Text>
+            </View>
+          )}
+
+          {hasNameOfGroup && (
+            <View style={styles.instructionsWrapper}>
+              <Text style={styles.labelStyle}>Add Questions & Answers</Text>
+            </View>
+          )}
+
+          <View style={styles.innerInputContainer}>
+            {!hasNameOfGroup && (
+              <View style={styles.formWrapper}>
+                <Text style={styles.labelStyle}>Quiz Name</Text>
+                <TextInput
+                  style={styles.textInputStyle}
+                  placeholder="enter quiz name"
+                  placeholderTextColor="#444"
+                  autoCapitalize="none"
+                  keyboardType="text"
+                  autoFocus={true}
+                  onChangeText={setNameOfGroup}
+                  value={nameOfGroup}
+                />
+              </View>
+            )}
+
+            {hasNameOfGroup && (
+              <View style={styles.formWrapper}>
+                <Text style={styles.labelStyle}>Question</Text>
+                <TextInput
+                  style={styles.textInputStyle}
+                  placeholder="enter question"
+                  placeholderTextColor="#444"
+                  autoCapitalize="none"
+                  keyboardType="text"
+                  autoFocus={true}
+                  onChangeText={setQuestion}
+                  value={question}
+                />
+              </View>
+            )}
+            {hasNameOfGroup && (
+              <View style={styles.formWrapper}>
+                <Text style={styles.labelStyle}>Answer</Text>
+                <TextInput
+                  style={styles.textInputStyle}
+                  placeholder="enter answer"
+                  placeholderTextColor="#444"
+                  autoCapitalize="none"
+                  keyboardType="text"
+                  autoFocus={true}
+                  onChangeText={setAnswer}
+                  value={answer}
+                />
+              </View>
+            )}
+          </View>
         </View>
-      )}
-
-      {hasNameOfGroup && (
-        <View style={styles.instructionsWrapper}>
-          <Text style={styles.labelStyle}>Add Questions & Answers</Text>
-        </View>
-      )}
-
-      <View style={styles.innerInputContainer}>
-        {!hasNameOfGroup && (
-          <View style={styles.formWrapper}>
-            <TextInput
-              style={styles.textInputStyle}
-              placeholder="enter group name"
-              placeholderTextColor="#444"
-              autoCapitalize="none"
-              keyboardType="text"
-              autoFocus={true}
-              onChangeText={setNameOfGroup}
-              value={nameOfGroup}
-            />
-          </View>
-        )}
-
-        {hasNameOfGroup && (
-          <View style={styles.formWrapper}>
-            <Text style={styles.labelStyle}>Question</Text>
-            <TextInput
-              style={styles.textInputStyle}
-              placeholder="enter question"
-              placeholderTextColor="#444"
-              autoCapitalize="none"
-              keyboardType="text"
-              autoFocus={true}
-              onChangeText={setQuestion}
-              value={question}
-            />
-          </View>
-        )}
-        {hasNameOfGroup && (
-          <View style={styles.formWrapper}>
-            <Text style={styles.labelStyle}>Answer</Text>
-            <TextInput
-              style={styles.textInputStyle}
-              placeholder="enter answer"
-              placeholderTextColor="#444"
-              autoCapitalize="none"
-              keyboardType="text"
-              autoFocus={true}
-              onChangeText={setAnswer}
-              value={answer}
-            />
-          </View>
-        )}
-      </View>
+      </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
   );
 }
@@ -91,30 +99,31 @@ const styles = StyleSheet.create({
     // justifyContent: 'center',
     flexDirection: 'column',
     height: '50%',
-    borderStyle: 'solid',
+    minHeight: '50%',
+    // borderStyle: 'solid',
     // borderWidth: '2px',
-    // borderColor: 'red',
+    // borderColor: 'yellow',
   },
   innerInputContainer: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'column',
-    borderStyle: 'solid',
+    // borderStyle: 'solid',
     // borderWidth: '2px',
     // borderColor: 'red',
   },
   formWrapper: {
     display: 'flex',
-    marginTop: 100,
-    marginBottom: 15,
+    marginTop: 50,
+    // marginBottom: 15,
   },
   textInputStyle: {
     width: 390,
     height: 50,
     backgroundColor: '#fff',
-    marginTop: 5,
-    marginBottom: 5,
+    // marginTop: 5,
+    // marginBottom: 5,
     padding: 4,
   },
   labelStyle: {
@@ -127,7 +136,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'column',
-    borderStyle: 'solid',
+    // borderStyle: 'solid',
     // borderWidth: '2px',
     // borderColor: 'red',
   },

@@ -111,6 +111,10 @@ export default function AddQuizGroup({ navigation }) {
   // console.log('GROUPSET', groupSet);
 
   return (
+    // <KeyboardAvoidingView
+    //   behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    // >
+    //   <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
     <View style={styles.addQuizGroupContainer}>
       <LinearGradient
         colors={['#2980B9', '#6DD5FA', '#FFFFFF']}
@@ -136,6 +140,8 @@ export default function AddQuizGroup({ navigation }) {
         </View>
       </LinearGradient>
     </View>
+    //   </TouchableWithoutFeedback>
+    // </KeyboardAvoidingView>
   );
 }
 
